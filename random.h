@@ -43,4 +43,3 @@ public:
 		return Next(100)<probability;
 	}
 };
-Random random(time(nullptr));

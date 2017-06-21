@@ -11,52 +11,50 @@ class Stack
 private:
 	containers::DynArr<typ> array;
 public:
-    ///Normální konstruktor
-    Stack():array(0){}
-    Stack(const Stack& vzor)
-			:array(vzor.array){}
-    Stack(Stack&& zdroj)
-			:array(func::Move(zdroj.array)){}
+    Stack()=default;
 	Stack(std::initializer_list<typ> init)
 			:array(init){}
-    inline size_t size()const
+    Stack(Stack&& zdroj)
+			:array(func::Move(zdroj.array)){}
+    Stack& operator=(Stack&& vzor)
+    {
+    	array=func::Move(vzor.array);
+        return *this;
+    }
+    size_t size()const
     {
         return array.size();
     }
-    inline typ* begin()const noexcept
+    auto begin()const noexcept
     {
-        return array.begin();
+        return array.rbegin();
     }
-    inline typ* end()const noexcept
+    auto end()const noexcept
     {
-        return array.end();
+        return array.rend();
     }
-    inline bool empty()const noexcept
+    bool empty()const noexcept
     {
-        return array.size()==1;
+        return array.size()==0;
     }
-    inline containers::DynArr<typ>& data()
+    containers::DynArr<typ>& data()
     {
     	return array;
     }
-    Stack& operator=(const Stack& vzor)
+    typ& top()const
     {
-    	array=vzor.array;
-        return *this;
+        return array.back();
     }
-    Stack& push(typ value)
+    void push(typ value)
     {
         array.push_back(value);
         return *this;
     }
-    Stack& pop()
+    typ& pop()
     {
+        auto x=top();
     	array.pop_back();
-        return *this;
-    }
-    inline typ& top()const
-    {
-        return array.back();
+        return x;
     }
 };
 }

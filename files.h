@@ -68,14 +68,7 @@ uint64 Size(std::ofstream& file)
 containers::DynArr<std::string> GetAllLines(const std::string& filename)
 {
 	std::ifstream is(filename);
-	containers::DynArr<std::string> result;
-	while(!is.eof())
-	{
-		std::string line;
-		std::getline(is, line);
-		result.push_back(line);
-	}
-	return (containers::DynArr<std::string>&&)result;
+	return (containers::DynArr<std::string>&&)GetAllLines(is);
 }
 containers::DynArr<std::string> GetAllLines(std::fstream& is)
 {
