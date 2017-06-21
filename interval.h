@@ -25,7 +25,14 @@ public:
 		}
 		void operator++()
 		{
-			pos=(step>=0?(pos+step>stop?stop:pos+step):pos+step<stop?stop:pos+step);
+			if(step>=0)
+			{
+				pos=(pos+step>stop)?stop:pos+step;
+			}
+			else
+			{
+				pos=(pos+step<stop)?stop:pos+step;
+			}
 		}
 		void operator++(int)
 		{
@@ -44,9 +51,26 @@ public:
     {
         return iterator(stop+step, -step, start-step);
     }
-    iterator end()
+    iterator rend()
     {
     	return iterator(start-step, 0, start-step);
     }
 };
+template<typename T>
+Interval<T> Range(T count)
+{
+	return Interval<T>(0, count, 1);
+}
+
+template<typename T>
+Interval<T> Range(T start, T stop)
+{
+	return Interval<T>(start, stop, 1);
+}
+
+template<typename T>
+Interval<T> Range(T start, T stop, T step)
+{
+	return Interval<T>(start, stop, step);
+}
 }
