@@ -1,17 +1,18 @@
 #pragma once
 
 #include <iostream>
+#include <stdexcept>
+#include <ctime>
 
 #include "types.h"
 
 namespace time
 {
-#include <time.h>
-
-constexpr int32 MinutesInDay=24*60;
-constexpr int32 SecondsInDay=24*60*60;
+using std::clock_t;
+using std::time_t;
+constexpr uint32 MinutesInDay=24*60;
+constexpr uint32 SecondsInDay=24*60*60;
 constexpr clock_t ClocksPerSec=CLOCKS_PER_SEC;
-#undef CLOCKS_PER_SEC
 
 inline bool IsLeapYear(uint16 year)noexcept
 {
@@ -25,7 +26,7 @@ uint8 DaysInMonth(uint16 year, uint8 month)noexcept
 {
 	if(month==2)return IsLeapYear(year)?29:28;
 	if(month<8)	return (month%2==0)?30:31;
-	else	return (month%2==0)?31:30;
+	else		return (month%2==0)?31:30;
 }
 
 class Duration
@@ -180,13 +181,13 @@ public:
 	{
 		return Now().DateOnly();
 	}
-	inline std::string ToString()const noexcept
+	explicit operator std::string()const noexcept
 	{
         return std::string(asctime(localtime(&time)));
 	}
-	inline friend std::ostream& operator<<(std::ostream& out, Time tim)
+	friend std::ostream& operator<<(std::ostream& out, Time tim)
 	{
-		return out<<tim.ToString();
+		return out<<std::string(tim);
 	}
 	std::string FmtAsString(std::string Format, std::size_t MaxSize=128)const
 	{
@@ -196,87 +197,70 @@ public:
 		delete c_string;
 		return res;
 	}
-	inline Duration operator-(Time tm2)const noexcept
+	Duration operator-(Time tm2)const noexcept
 	{
-		return Duration(difftime(time,tm2.time));
+		return Duration(difftime(time, tm2.time));
 	}
 	Time operator+(Duration tm2)const noexcept
 	{
-		Time tim(*this);
-		tim.time+=tm2.InSeconds();
-		return tim;
+		return Time(time+tm2.InSeconds());
 	}
 	Time operator-(Duration tm2)const noexcept
 	{
-		Time tim(*this);
-		tim.time-=tm2.InSeconds();
-		return tim;
+		return Time(time-tm2.InSeconds());
 	}
 	Time AddSeconds(time_t tm2)const noexcept
 	{
-		Time result(*this);
-		result.time+=tm2;
-		return result;
+		return Time(time+tm2);
 	}
 	Time AddMinutes(time_t tm2)const noexcept
 	{
-		Time result(*this);
-		result.time+=tm2*60;
-		return result;
+		return Time(time+tm2*60);
 	}
 	Time AddHours(uint32 tm2)const noexcept
 	{
-		Time result(*this);
-		result.time+=tm2*3600;
-		return result;
+		return Time(time+tm2*3600);
 	}
 	Time AddDays(uint16 tm2)const noexcept
 	{
-		Time result(*this);
-		result.time+=tm2*86400;
-		return result;
+		return Time(time+tm2*86400);
 	}
 	Time AddWeeks(uint16 tm2)const noexcept
 	{
-		Time result(*this);
-		result.time+=tm2*86400*7;
-		return result;
+		return Time(time+tm2*86400*7);
 	}
-	bool SetDay(uint8 day)noexcept
+	void SetDay(uint8 day)
 	{
 		tm tmp;
 		tmp=*localtime(&time);
 		if(day>DaysInMonth(tmp.tm_year,tmp.tm_mon)||day<1)
 		{
-			return false;
+			throw std::logic_error("Time::SetDay>This month has not so much days");
 		}
 		tmp.tm_mday=day;
 		time=mktime(&tmp);
-		return true;
 	}
-	bool SetMonth(uint8 mon)noexcept
+	void SetMonth(uint8 mon)
 	{
 		if(mon>12||mon<1)
 		{
-			return false;
+			throw std::logic_error("Time::SetMonth>This month does not exist");
 		}
 		tm tmp;
 		tmp=*localtime(&time);
 		tmp.tm_mon=mon-1;
 		time=mktime(&tmp);
-		return true;
 	}
-	bool SetYear(uint16 year)noexcept
+	void SetYear(uint16 year)
 	{
 		if(year<1900)
 		{
-			return false;
+			throw std::logic_error("Time::SetYear>This class can handle only years since 1900");
 		}
 		tm tmp;
 		tmp=*localtime(&time);
 		tmp.tm_year=year-1900;
 		time=mktime(&tmp);
-		return true;
 	}
 	inline bool operator<(Time tm2)const noexcept
 	{
@@ -324,15 +308,15 @@ public:
 	}
 	inline uint16 Hour()const noexcept
 	{
-		return localtime(&time)->tm_hour;
+		return time/3600%24;
 	}
 	inline uint16 Minute()const noexcept
 	{
-		return localtime(&time)->tm_min;
+		return time/60%60;
 	}
 	inline uint16 Second()const noexcept
 	{
-		return localtime(&time)->tm_sec;
+		return time%60;
 	}
 	inline bool IsDaylightSavingTime()const noexcept
 	{
