@@ -154,27 +154,27 @@ struct Point
 		return Point(x/second, y/second);
 	}
 	//Prirazovani
-	constexpr Point operator-=(const Point& second)const noexcept
+	constexpr Point operator-=(const Point& second)noexcept
 	{
 		return *this=*this-second;
 	}
-	constexpr Point operator+=(const Point& second)const noexcept
+	constexpr Point operator+=(const Point& second)noexcept
 	{
 		return *this=*this+second;
 	}
-	constexpr Point operator*=(const Point& second)const noexcept
+	constexpr Point operator*=(const Point& second)noexcept
 	{
 		return *this=*this*second;
 	}
-	constexpr Point operator/=(const Point& second)const noexcept
+	constexpr Point operator/=(const Point& second)noexcept
 	{
 		return *this=*this/second;
 	}
-	constexpr Point operator*=(typ second)const noexcept
+	constexpr Point operator*=(typ second)noexcept
 	{
 		return *this=*this*second;
 	}
-	constexpr Point operator/=(typ second)const noexcept
+	constexpr Point operator/=(typ second)noexcept
 	{
 		return *this=*this/second;
 	}

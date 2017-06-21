@@ -23,6 +23,17 @@ public:
 	{
         return IsPressed(value)&&IsPressed(args...);
 	}
+	bool IsAnyPressed()const
+	{
+        for(int i=0;i<size;++i)
+		{
+			if(keys[i])
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 	size_t Size()const noexcept
 	{
 		return size;

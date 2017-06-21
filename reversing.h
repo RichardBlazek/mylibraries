@@ -20,12 +20,12 @@ public:
 template<typename T>
 auto Reverse(T& container)
 {
-	return IteratorPair<decltype(container.rbegin())>(container.rbegin(),container.rend());
+	return IteratorPair<decltype(container.rbegin())>(container.rbegin(), container.rend());
 }
 template<typename T>
 auto Reverse(const T& container)
 {
-	return IteratorPair<decltype(container.rbegin())>(container.rbegin(),container.rend());
+	return IteratorPair<decltype(container.rbegin())>(container.rbegin(), container.rend());
 }
 template<typename T, size_t len>
 auto Reverse(T(&array)[len])

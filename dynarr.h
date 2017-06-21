@@ -199,13 +199,23 @@ public:
 		}
 		return *this;
 	}
-	size_t find(const typ& value)const noexcept
+	template<typename Callable>
+	size_t find(const Callable& fun)const noexcept
 	{
 		for(size_t i=0; i<len; ++i)
 		{
-			if(alloc[i]==value)return i;
+			if(fun(alloc[i]))
+			{
+				return i;
+			}
 		}
 		return len;
+	}
+	size_t find(const typ& value)const noexcept
+	{
+		return find([&](const typ& x){
+					return x==value;
+		});
 	}
 	const DynArr& operator+=(const DynArr& second)noexcept
 	{
