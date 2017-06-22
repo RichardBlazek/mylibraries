@@ -10,6 +10,7 @@ namespace gui
 		SDL::Init();
 		font.Open(file, 12);
 	}
+	#include "gui/label.h"
 	#include "gui/button.h"
 	bool IsASCII(char c)
 	{

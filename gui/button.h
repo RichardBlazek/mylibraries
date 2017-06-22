@@ -1,34 +1,14 @@
 #pragma once
 
-class Button
+class Button: public Label
 {
 public:
 	enum class State {Normal, MouseOn, MouseDown};
 private:
-	std::string text;
-	SDL::Rect position;
 	State state=State::Normal;
 public:
-	Button()=default;
-	Button(const std::string& text, const SDL::Rect& position)
-		:text(text), position(position) {}
-	std::string GetText()const
-	{
-		return text;
-	}
-	void SetText(const std::string& str)
-	{
-		text=str;
-	}
-	SDL::Rect GetPosition()const
-	{
-		return position;
-	}
-	void SetPosition(const SDL::Rect& pos)
-	{
-		position=pos;
-	}
-	void DrawOn(SDL::Renderer& rend)
+	using Label::Label;
+	virtual void DrawOn(SDL::Renderer& rend)override
 	{
 		if(state==State::MouseDown)
 		{
@@ -43,7 +23,7 @@ public:
 			rend.Draw(position, SDL::Color(200, 200, 200));
 		}
 		rend.DrawBorder(position, SDL::Color::Black());
-		rend.Draw(font, text, SDL::Color::Black(), position);
+		Label::DrawOn(rend);
 	}
 	bool Catch(const SDL::Event& evt)
 	{

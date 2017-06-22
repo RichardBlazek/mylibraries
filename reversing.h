@@ -1,8 +1,12 @@
 #pragma once
 
+#include <iterator>
+
 namespace containers
 {
-template<typename iter>class IteratorPair
+
+template<typename iter>
+class IteratorPair
 {
 private:
 	iter first, last;
