@@ -1,12 +1,10 @@
 #pragma once
 
-class TextInputBox: public Widget
+class TextInputBox: public Label
 {
 public:
 	enum class State {Normal, Active, MouseDown, ShiftDown};
 private:
-	std::string text;
-	SDL::Rect position;
 	State state=State::Normal;
 	size_t shift=0;
 	size_t cursor=0;
@@ -196,23 +194,7 @@ public:
 	TextInputBox(const SDL::Rect& position, bool star)
 		:position(position), star(star)
 	{
-		this->position.h=font.TextSize("").y+4;
-	}
-	std::string GetText()const
-	{
-		return text;
-	}
-	void SetText(const std::string& str)
-	{
-		text=str;
-	}
-	SDL::Rect GetPosition()const
-	{
-		return position;
-	}
-	void SetPosition(const SDL::Rect& pos)
-	{
-		position=pos;
+		Label::position.h=font.TextSize("").y+4;
 	}
 	size_t GetCursorPosition()const
 	{
