@@ -1,6 +1,6 @@
 #pragma once
 
-class Label
+class Label: public Widget
 {
 private:
 	std::string text;
@@ -25,11 +25,11 @@ public:
 	{
 		position=pos;
 	}
-	virtual void DrawOn(SDL::Renderer& rend)
+	virtual void DrawOn(SDL::Renderer& rend)override
 	{
 		rend.Draw(font, text, SDL::Color::Black(), position);
 	}
-	bool Catch(const SDL::Event& evt)
+	virtual bool Catch(const SDL::Event& evt)override
 	{
 		return false;
 	}

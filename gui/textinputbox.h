@@ -1,6 +1,6 @@
 #pragma once
 
-class TextInputBox
+class TextInputBox: public Widget
 {
 public:
 	enum class State {Normal, Active, MouseDown, ShiftDown};
@@ -226,7 +226,7 @@ public:
 	{
 		MoveCursorAt(cur);
 	}
-	void DrawOn(SDL::Renderer& rend)
+	virtual void DrawOn(SDL::Renderer& rend)override
 	{
 		std::string backup_text=text;
 		size_t backup_cursor=cursor;
@@ -251,7 +251,7 @@ public:
 			selection_start=backup_ss;
 		}
 	}
-	bool Catch(const SDL::Event& evt)
+	virtual bool Catch(const SDL::Event& evt)override
 	{
 		if(evt.GetType()==evt.Type::MouseButtonDown)
 		{
