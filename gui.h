@@ -5,24 +5,14 @@
 namespace gui
 {
 	SDL::Font font;
-	void Init(std::string file)
+	void Init(std::string file, uint32 size=12)
 	{
 		SDL::Init();
-		font.Open(file, 12);
+		font.Open(file, size);
 	}
+	#include "gui/widget.h"
 	#include "gui/label.h"
 	#include "gui/button.h"
-	bool IsASCII(char c)
-	{
-		return uint8(c)<0x80;
-	}
-	bool IsMultibyteStart(char c)
-	{
-		return !IsASCII(c)&&uint8(c)<=0xBF;
-	}
-	bool IsMultibyteByte(char c)
-	{
-		return uint8(c)>=0xC0&&uint8(c)<=0xFD;
-	}
+	#include "gui/chars.h"
 	#include "gui/textinputbox.h"
 }

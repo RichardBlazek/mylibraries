@@ -13,12 +13,13 @@ class DynArr
 {
 private:
 	typ* alloc;
-	size_t len;
-	size_t cap;
+	size_t len=0;
+	size_t cap=0;
 public:
 	using iterator=typ*;
-	using reverse_iterator=std::reverse_iterator<typ*>;
-	DynArr():alloc(new typ[0]),len(0),cap(0) {}
+	using reverse_iterator=std::reverse_iterator<iterator>;
+
+	DynArr():alloc(new typ[0]) {}
 	explicit DynArr(size_t siz):alloc(new typ[siz]),len(siz),cap(siz) {}
 	DynArr(const std::initializer_list<typ>& init):DynArr(init.size())
 	{
@@ -35,7 +36,7 @@ public:
 	}
 	~DynArr()
 	{
-		delete[]alloc;
+		delete[] alloc;
 	}
 	DynArr(const DynArr& init):DynArr(init.len)
 	{
