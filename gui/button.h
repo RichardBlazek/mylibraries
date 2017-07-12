@@ -38,11 +38,11 @@ public:
 		}
 		if(evt.GetType()==evt.Type::MouseMotion)
 		{
-			if(state==State::Normal&&position.IsEnclosingPoint(evt.GetMouseMotion().Absolute))
+			if(state==State::Normal&&position.EnclosesPoint(evt.GetMouseMotion().Absolute))
 			{
 				state=State::MouseOn;
 			}
-			if(state!=State::Normal&&!position.IsEnclosingPoint(evt.GetMouseMotion().Absolute))
+			if(state!=State::Normal&&!position.EnclosesPoint(evt.GetMouseMotion().Absolute))
 			{
 				state=State::Normal;
 			}

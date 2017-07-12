@@ -32,6 +32,7 @@ namespace SDL
 #include "joystick.h"
 #include "powerstate.h"
 #include "clipboard.h"
+#include "cpu.h"
 #include "screensaver.h"
 #include "textinput.h"
 }

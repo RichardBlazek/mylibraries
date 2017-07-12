@@ -242,7 +242,7 @@ public:
 	{
 		if(evt.GetType()==evt.Type::MouseButtonDown)
 		{
-			if(position.IsEnclosingPoint(evt.GetMouseButton().Position))
+			if(position.EnclosesPoint(evt.GetMouseButton().Position))
 			{
 				state=State::MouseDown;
 				MoveCursorOnMouse(evt.GetMouseButton().Position);

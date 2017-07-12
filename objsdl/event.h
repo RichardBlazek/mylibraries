@@ -495,7 +495,7 @@ public:
 	Type GetType()const noexcept
 	{
 		auto tmp=event->type;
-		tmp=(tmp>=SDL_USEREVENT)?SDL_USEREVENT:tmp
+		tmp=(tmp>=SDL_USEREVENT)?SDL_USEREVENT:tmp;
 		return Type(tmp==SDL_WINDOWEVENT?0x201+event->window.event:tmp);
 	}
 	uint32 GetTimestamp()const noexcept

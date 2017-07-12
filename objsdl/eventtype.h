@@ -94,17 +94,17 @@ enum class Type:uint32
 	//Drag and drop events
 	DropFile=SDL_DROPFILE,			//The system requests a file open
 	DropText=SDL_DROPTEXT,
-	DropBegin=SDL_DROPBEGIN
+	DropBegin=SDL_DROPBEGIN,
 	DropComplete=SDL_DROPCOMPLETE,
-	
+
 	//Audio device events
 	AudioDeviceAdded=SDL_AUDIODEVICEADDED,
 	AudioDeviceRemoved=SDL_AUDIODEVICEREMOVED,
 
 	//Render events
 	RenderTargetsReset=SDL_RENDER_TARGETS_RESET,	//The render targets have been reset
-	RenderDeviceReset=SDL_RENDER_DEVICE_RESET
-	
+	RenderDeviceReset=SDL_RENDER_DEVICE_RESET,
+
 	//Events ::SDL_USEREVENT through ::SDL_LASTEVENT are for your use, and should be allocated with SDL_RegisterEvents()
 	User=SDL_USEREVENT,
 
