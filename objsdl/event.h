@@ -225,6 +225,22 @@ public:
 	{
         return WindowClose{event->window.windowID};
 	}
+	struct WindowTakeFocus
+	{
+		uint32 WindowID;
+	};
+	WindowTakeFocus GetWindowTakeFocus()const
+	{
+        return WindowTakeFocus{event->window.windowID};
+	}
+	struct WindowHitTest
+	{
+		uint32 WindowID;
+	};
+	WindowHitTest GetWindowHitTest()const
+	{
+        return WindowHitTest{event->window.windowID};
+	}
 	struct JoystickAxis
 	{
         uint32 JoystickID;

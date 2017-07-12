@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include "display.h"
 
 struct GammaRamp
@@ -19,7 +20,7 @@ struct GammaRamp
 	}
 };
 
-class Window
+class Window: public NonCopyable
 {
 private:
 	//Intern C window
@@ -31,8 +32,20 @@ public:
 	friend Cursor;
 	constexpr static int UndefinedPos=SDL_WINDOWPOS_UNDEFINED;
 	constexpr static int CenteredPos=SDL_WINDOWPOS_CENTERED;
-	Window(const Window&)=delete;
-	Window& operator=(const Window&)=delete;
+	enum class HitTestResult: uint8
+	{
+		Normal=SDL_HITTEST_NORMAL,  ///Region has no special properties
+		Draggable=SDL_HITTEST_DRAGGABLE,  ///Region can drag entire window
+		TopLeft=SDL_HITTEST_RESIZE_TOPLEFT,
+		Top=SDL_HITTEST_RESIZE_TOP,
+		TopRight=SDL_HITTEST_RESIZE_TOPRIGHT,
+		Right=SDL_HITTEST_RESIZE_RIGHT,
+		BottomRight=SDL_HITTEST_RESIZE_BOTTOMRIGHT,
+		Bottom=SDL_HITTEST_RESIZE_BOTTOM,
+		BottomLeft=SDL_HITTEST_RESIZE_BOTTOMLEFT,
+		Left=SDL_HITTEST_RESIZE_LEFT
+	};
+	using HitTest=std::function<HitTestResult(Window&, Point)>;
 	enum class Flags:uint32
 	{
 		None=0,
@@ -159,6 +172,10 @@ public:
 	{
 		SDL_SetWindowGrab(window, SDL_TRUE);
 	}
+	void SetInputFocus()noexcept
+	{
+		Error::IfNegative(SDL_SetWindowInputFocus(window));
+	}
 	void MakeResizable()noexcept
 	{
 		SDL_SetWindowResizable(window, SDL_TRUE);
@@ -276,6 +293,21 @@ public:
         int size;
         Error::IfNegative(SDL_GetWindowBordersSize(window, nullptr, nullptr, nullptr, &size));
         return size;
+	}
+	void SetHitTest(HitTest callback)
+	{
+		Error::IfNegative(SDL_SetWindowHitTest(window, [](SDL_Window* win, const SDL_Point* area, void* data)->SDL_HitTestResult
+		{
+			Window window;
+			window.window=win;
+			auto result=(*(HitTest*)data)(window, Point(area->x, area->y));
+			window.window=nullptr;
+			return HitTestResult(result);
+		}, (void*)&callback));
+	}
+	void DisableHitTesting()
+	{
+		Error::IfNegative(SDL_SetWindowHitTest(window, nullptr, nullptr));
 	}
 };
 Window::Flags operator|(Window::Flags first, Window::Flags second)noexcept

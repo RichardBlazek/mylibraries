@@ -47,6 +47,8 @@ enum class Type:uint32
 	WindowFocusGained,
 	WindowFocusLost,
 	WindowClose,
+	WindowTakeFocus,
+	WindowHitTest,
 
 	//Keyboard events
 	Keydown=SDL_KEYDOWN,			//Key pressed

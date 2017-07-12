@@ -8,7 +8,7 @@ public:
     Joystick(const Joystick&)=delete;
     Joystick& operator=(const Joystick&)=delete;
 	using GUID=SDL_JoystickGUID;
-    enum class HatState:uint8
+    enum class HatState: uint8
     {
         Centred=0x0,
         Up=0x1,
@@ -20,7 +20,7 @@ public:
         RightDown=Right|Down,
         LeftDown=Left|Down
     };
-	enum class Power
+	enum class Power: uint8
 	{
 		Unknown=SDL_JOYSTICK_POWER_UNKNOWN,
 		Empty=SDL_JOYSTICK_POWER_EMPTY,

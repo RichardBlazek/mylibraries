@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include "dynarr.h"
 #include "types.h"
+#include "nocopy.h"
 
 #include "oldsdl.h"
 
