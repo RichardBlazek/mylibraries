@@ -54,3 +54,8 @@ void Init()
 }
 
 constexpr bool IsBigEndian=(SDL_BYTEORDER==SDL_BIG_ENDIAN);
+
+std::string GetPlatform()
+{
+	return SDL_GetPlatform();
+}

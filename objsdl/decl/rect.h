@@ -14,7 +14,7 @@ struct Rect
 		return SDL_Rect{x,y,w,h};
 	}
     ///Functions for easy manipulation with Rectangle
-    bool IsEnclosingPoint(const Point& point)const noexcept
+    bool EnclosesPoint(const Point& point)const noexcept
 	{
 		return point.x>=x&&point.x<=x+w&&point.y>=y&&point.y<=y+h;
 	}
@@ -39,7 +39,7 @@ struct Rect
     ///If widht or height is equal to zero, this function returns [true]
 	bool IsEmpty()const noexcept
 	{
-		return w==0||h==0;
+		return w*h==0;
 	}
 	Point Center()const noexcept
 	{
@@ -52,6 +52,38 @@ struct Rect
 	Point Size()const noexcept
 	{
 		return Point{w, h};
+	}
+	Point LeftUp()const noexcept
+	{
+		return Point{x, y};
+	}
+	Point RightUp()const noexcept
+	{
+		return Point{x+w, y};
+	}
+	Point LeftDown()const noexcept
+	{
+		return Point{x, y+h};
+	}
+	Point RightDown()const noexcept
+	{
+		return Point{x+w, y+h};
+	}
+	int Left()const noexcept
+	{
+		return x;
+	}
+	int Up()const noexcept
+	{
+		return y;
+	}
+	int Right()const noexcept
+	{
+		return x+w;
+	}
+	int Down()const noexcept
+	{
+		return y+h;
 	}
 	uint32 Content()const noexcept
 	{

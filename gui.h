@@ -1,6 +1,7 @@
 #pragma once
 
 #include "objsdl.h"
+#include "nocopy.h"
 
 namespace gui
 {

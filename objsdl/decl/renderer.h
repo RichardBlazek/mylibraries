@@ -311,6 +311,10 @@ public:
 	{
 		Error::IfNegative(SDL_RenderSetClipRect(renderer, nullptr));
 	}
+	bool IsClipEnabled()
+	{
+		return bool(SDL_RenderIsClipEnabled(renderer));
+	}
 	Rect GetClipRect()noexcept
 	{
 		SDL_Rect result;

@@ -146,3 +146,7 @@ auto Joystick::GUID_FromString(std::string str)->GUID
 {
 	return SDL_JoystickGetGUIDFromString(str.c_str());
 }
+auto Joystick::GetPower()->Power
+{
+	return Power(SDL_JoystickCurrentPowerLevel(joystick));
+}

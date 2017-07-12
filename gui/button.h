@@ -1,13 +1,13 @@
 #pragma once
 
-class Button: public Label
+class Button: public CentredLabel
 {
 public:
 	enum class State {Normal, MouseOn, MouseDown};
 private:
 	State state=State::Normal;
 public:
-	using Label::Label;
+	using CentredLabel::CentredLabel;
 	virtual void DrawOn(SDL::Renderer& rend)override
 	{
 		if(state==State::MouseDown)
@@ -23,7 +23,7 @@ public:
 			rend.Draw(position, SDL::Color(200, 200, 200));
 		}
 		rend.DrawBorder(position, SDL::Color::Black());
-		Label::DrawOn(rend);
+		CentredLabel::DrawOn(rend);
 	}
 	bool Catch(const SDL::Event& evt)
 	{

@@ -8,7 +8,7 @@ public:
     Joystick(const Joystick&)=delete;
     Joystick& operator=(const Joystick&)=delete;
 	using GUID=SDL_JoystickGUID;
-    enum HatState:uint8
+    enum class HatState:uint8
     {
         Centred=0x0,
         Up=0x1,
@@ -20,6 +20,16 @@ public:
         RightDown=Right|Down,
         LeftDown=Left|Down
     };
+	enum class Power
+	{
+		Unknown=SDL_JOYSTICK_POWER_UNKNOWN,
+		Empty=SDL_JOYSTICK_POWER_EMPTY,
+		Low=SDL_JOYSTICK_POWER_LOW,
+		Medium=SDL_JOYSTICK_POWER_MEDIUM,
+		Full=SDL_JOYSTICK_POWER_FULL,
+		Wired=SDL_JOYSTICK_POWER_WIRED,
+		Max=SDL_JOYSTICK_POWER_MAX,
+	};
     Joystick();
     Joystick(Joystick&& joy);
     Joystick& operator=(Joystick&& joy);
@@ -49,6 +59,7 @@ public:
     static bool IsEnabledEventPolling();
     bool IsAttached();
     GUID GetGUID();
+	Power GetPower();
     static std::string GUID_ToString(GUID guid);
     static GUID GUID_FromString(std::string str);
 };
