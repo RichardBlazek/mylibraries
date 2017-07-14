@@ -75,9 +75,12 @@ public:
 	void Create(int width, int height, int depth, Masks masks, Pixel::Format format);
 	static Surface LoadImg(const std::string& file)
 	{
-		Surface result;
-		result.surface=IMG_Load(file.c_str());
-		Error::IfZero(result.surface);
+		Surface result(Error::IfZero(IMG_Load(file.c_str())));
+		return (Surface&&)result;
+	}
+	static Surface LoadXPM(char** xpm)
+	{
+		Surface result(Error::IfZero(IMG_ReadXPMFromArray(xpm)));
 		return (Surface&&)result;
 	}
 	void SaveAsBMP(const std::string& file)

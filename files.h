@@ -1,25 +1,12 @@
 #pragma once
 
 #include <fstream>
-#include "dynarr.h"
+#include <vector>
+#include "func.h"
 
 namespace file
 {
-bool UpLine(std::ifstream& source)
-{
-	char ch='\0';
-	while(ch!='\n')
-	{
-		source.seekg(source.tellg()-std::streamoff(2), source.beg);
-		if(source.tellg()==0)
-		{
-			return true;
-		}
-		ch=source.get();
-	}
-	return false;
-}
-bool UpLine(std::fstream& source)
+bool UpLine(std::istream& source)
 {
 	char ch='\0';
 	while(ch!='\n')
@@ -41,55 +28,31 @@ inline bool Delete(const std::string& filename)
 {
 	return std::remove(filename.c_str())!=0;
 }
-uint64 Size(std::fstream& file)
+uint64 Size(std::istream& stream)
 {
-	uint64 pos=file.tellg();
-	file.seekg(0, file.end);
-	uint64 result=file.tellg();
-	file.seekg(pos, file.beg);
+	auto pos=stream.tellg();
+	stream.seekg(0, stream.end);
+	auto result=stream.tellg();
+	stream.seekg(pos, stream.beg);
 	return result;
 }
-uint64 Size(std::ifstream& file)
+uint64 Size(std::ostream& stream)
 {
-	uint64 pos=file.tellg();
-	file.seekg(0, file.end);
-	uint64 result=file.tellg();
-	file.seekg(pos, file.beg);
+	auto pos=stream.tellp();
+	stream.seekp(0, stream.end);
+	auto result=stream.tellp();
+	stream.seekp(pos, stream.beg);
 	return result;
 }
-uint64 Size(std::ofstream& file)
+std::vector<std::string> GetAllLines(std::istream& in)
 {
-	uint64 pos=file.tellp();
-	file.seekp(0, file.end);
-	uint64 result=file.tellp();
-	file.seekp(pos, file.beg);
-	return result;
-}
-containers::DynArr<std::string> GetAllLines(const std::string& filename)
-{
-	std::ifstream is(filename);
-	return (containers::DynArr<std::string>&&)GetAllLines(is);
-}
-containers::DynArr<std::string> GetAllLines(std::fstream& is)
-{
-	containers::DynArr<std::string> result;
-	while(!is.eof())
+	std::vector<std::string> result;
+	while(in)
 	{
 		std::string line;
-		std::getline(is, line);
+		std::getline(in, line);
 		result.push_back(line);
 	}
-	return (containers::DynArr<std::string>&&)result;
-}
-containers::DynArr<std::string> GetAllLines(std::ifstream& is)
-{
-	containers::DynArr<std::string> result;
-	while(!is.eof())
-	{
-		std::string line;
-		std::getline(is, line);
-		result.push_back(line);
-	}
-	return (containers::DynArr<std::string>&&)result;
+	return func::Move(result);
 }
 }

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <functional>
 #include "display.h"
 
 struct GammaRamp
@@ -28,7 +27,7 @@ private:
 public:
 	friend Renderer;
 	friend void MessageBox::Show(const std::string&, const std::string&, Flags flag, SDL::Window*);
-	friend std::string MessageBox::Dialog(const std::string&, const std::string&, const containers::DynArr<std::string>&, size_t, size_t, Flags, ColorScheme*, Window*);
+	friend std::string MessageBox::Dialog(const std::string&, const std::string&, const std::vector<std::string>&, size_t, size_t, Flags, ColorScheme*, Window*);
 	friend Cursor;
 	constexpr static int UndefinedPos=SDL_WINDOWPOS_UNDEFINED;
 	constexpr static int CenteredPos=SDL_WINDOWPOS_CENTERED;
@@ -302,7 +301,7 @@ public:
 			window.window=win;
 			auto result=(*(HitTest*)data)(window, Point(area->x, area->y));
 			window.window=nullptr;
-			return HitTestResult(result);
+			return SDL_HitTestResult(result);
 		}, (void*)&callback));
 	}
 	void DisableHitTesting()

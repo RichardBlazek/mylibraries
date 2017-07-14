@@ -6,14 +6,12 @@ enum class SystemCursor
 	SizeNESW,SizeWE,SizeNS,SizeAll,No,Hand
 };
 
-class Cursor
+class Cursor: public NonCopyable
 {
 private:
 	SDL_Cursor* cursor=nullptr;
 public:
 	Cursor()=default;
-	Cursor(const Cursor&)=delete;
-	Cursor& operator=(const Cursor&)=delete;
 	Cursor(Cursor&& init):cursor(init.cursor)
 	{
 		init.cursor=nullptr;

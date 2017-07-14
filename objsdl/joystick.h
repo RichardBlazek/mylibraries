@@ -36,15 +36,11 @@ Joystick::~Joystick()
 }
 std::string Joystick::Name()
 {
-	const char* tmp=SDL_JoystickName(joystick);
-	Error::Condition(!tmp);
-	return tmp;
+	return Error::IfZero(SDL_JoystickName(joystick));
 }
-std::string Joystick::NameFromIndex(int device_index)
+std::string Joystick::NameOf(int device_index)
 {
-	const char* tmp=SDL_JoystickNameForIndex(device_index);
-	Error::Condition(!tmp);
-	return tmp;
+	return Error::IfZero(SDL_JoystickNameForIndex(device_index));
 }
 uint32 Joystick::GetId()
 {

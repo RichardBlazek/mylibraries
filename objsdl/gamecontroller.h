@@ -3,9 +3,7 @@
 class GameController
 {
 private:
-	SDL_GameController* gcon;
-	using sdlAxis=SDL_GameControllerAxis;
-	using sdlButton=SDL_GameControllerButton;
+	SDL_GameController* gcon=nullptr;
 public:
 	enum class Axis
 	{
@@ -68,10 +66,10 @@ public:
 				int Mask;
 		}Hat;
     };
-	GameController():gcon(nullptr){}
+	GameController()=default;
 	void Close()
 	{
-		if(gcon!=nullptr)
+		if(gcon)
 		{
 			SDL_GameControllerClose(gcon);
 			gcon=nullptr;
@@ -82,7 +80,7 @@ public:
 		Close();
 		gcon=Error::IfZero(SDL_GameControllerOpen(joy_index));
 	}
-    GameController(uint32 joy_index):gcon(nullptr)
+    GameController(uint32 joy_index)
     {
 		Open(joy_index);
     }
@@ -173,13 +171,13 @@ public:
 	int16 GetAxis(Axis axis)
 	{
 		int16 value=SDL_GameControllerGetAxis(gcon, sdlAxis(axis));
-		Error::Condition(value==0&&std::string(SDL_GetError())!="");
+		Error::Condition(value==0&&!std::string(SDL_GetError()).empty());
 		return value;
 	}
 	bool GetButton(Button button)
 	{
 		bool value=SDL_GameControllerGetButton(gcon, sdlButton(button));
-		Error::Condition(!value&&std::string(SDL_GetError())!="");
+		Error::Condition(!value&&!std::string(SDL_GetError()).empty());
 		return value;
 	}
 	static Axis AxisFromString(const std::string& str)

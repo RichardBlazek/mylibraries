@@ -4,7 +4,9 @@
 #include <string>
 #include <cmath>
 #include <cstdlib>
-#include "dynarr.h"
+#include <functional>
+#include <vector>
+#include "func.h"
 #include "types.h"
 #include "nocopy.h"
 

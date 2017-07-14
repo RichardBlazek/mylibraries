@@ -1,10 +1,9 @@
 #pragma once
 
 ///Object Renderer
-class Renderer
+class Renderer: public NonCopyable
 {
 private:
-	template<typename T>using DynArr=containers::DynArr<T>;
 	SDL_Renderer* renderer;
 	///Set Draw Color of Renderer
 	void SetDrawColor(const Color& col)
@@ -49,9 +48,6 @@ public:
 		}
 	};
 	friend Texture;
-	//Creating and destroying----------------------------------------
-	Renderer(const Renderer&)=delete;
-	Renderer& operator=(const Renderer&)=delete;
 
 	Renderer()noexcept:renderer(nullptr) {}
 	Renderer(Renderer&& init):renderer(init.renderer)
@@ -129,35 +125,35 @@ public:
 			angle+=angle_stepsize;
 		}
 	}
-	void Draw(const DynArr<Point>& objects, const Color& col)
+	void Draw(const std::vector<Point>& objects, const Color& col)
 	{
 		for(auto& x:objects)
 		{
 			Draw(x, col);
 		}
 	}
-	void Draw(const DynArr<Line>& objects, const Color& col)
+	void Draw(const std::vector<Line>& objects, const Color& col)
 	{
 		for(auto& x:objects)
 		{
 			Draw(x, col);
 		}
 	}
-	void Draw(const DynArr<Rect>& objects, const Color& col)
+	void Draw(const std::vector<Rect>& objects, const Color& col)
 	{
 		for(auto& x:objects)
 		{
 			Draw(x, col);
 		}
 	}
-	void DrawBorder(const DynArr<Rect>& objects, const Color& col)
+	void DrawBorder(const std::vector<Rect>& objects, const Color& col)
 	{
 		for(auto& x:objects)
 		{
 			DrawBorder(x, col);
 		}
 	}
-	void DrawBorder(const DynArr<Circle>& objects, const Color& col)
+	void DrawBorder(const std::vector<Circle>& objects, const Color& col)
 	{
 		for(auto& x:objects)
 		{

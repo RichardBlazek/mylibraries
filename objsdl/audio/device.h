@@ -1,11 +1,10 @@
 #pragma once
 
 //Třída umožňující samotné přehrávání hudby
-class AudioDevice
+class AudioDevice: public NonCopyable
 {
 private:
-	using ID=SDL_AudioDeviceID;
-	ID id=0;
+	SDL_AudioDeviceID id=0;
 public:
 	enum class Status
 	{
@@ -47,6 +46,16 @@ public:
 	~AudioDevice()
 	{
 		Close();
+	}
+	AudioDevice(AudioDevice&& device):id(device.id)
+	{
+		device.id=nullptr;
+	}
+	AudioDevice& operator=(AudioDevice&& device)
+	{
+		Close();
+		id=device.id;
+		device.id=nullptr;
 	}
 	Status GetStatus()
 	{

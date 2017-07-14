@@ -1,7 +1,7 @@
 #pragma once
 
 //Třída pro uchovávající zvuková data
-class WAVBuffer
+class WAVBuffer: public NonCopyable
 {
 private:
 	size_t len=0;
@@ -10,9 +10,6 @@ public:
 	//Konstruktory
 	WAVBuffer()=default;
 	WAVBuffer(uint8* buf, size_t len):len(len), buf(buf){}
-	//Buffer je jen jeden
-	WAVBuffer(const WAVBuffer& init)=delete;
-	WAVBuffer& operator=(const WAVBuffer& init)=delete;
 	//Přesun
 	WAVBuffer(WAVBuffer&& init):len(init.len), buf(init.buf)
 	{

@@ -1,6 +1,6 @@
 #pragma once
 
-class Texture
+class Texture: public NonCopyable
 {
 private:
     SDL_Texture* texture;
@@ -25,11 +25,9 @@ public:
 	};
 	struct LockedData
 	{
-        void* pixels;
-        int bytesPerLine;
+        void* Pixels;
+        int BytesPerLine;
 	};
-    Texture(const Texture&)=delete;
-    Texture& operator=(const Texture&)=delete;
 	friend Renderer;
     Texture()noexcept:texture(nullptr){}
     ~Texture()noexcept
@@ -47,8 +45,8 @@ public:
 		src.texture=nullptr;
 		return *this;
 	}
-    Texture(Renderer& renderer, uint32 format, uint32 access, uint32 w, uint32 h)
-		:texture(SDL_CreateTexture(renderer.renderer,format,access,w,h))
+    Texture(Renderer& renderer, Pixel::Format format, Access access, Point size)
+		:texture(SDL_CreateTexture(renderer.renderer, uint32(format), int(access), size.x, size.y))
 	{
 		Error::IfZero(texture);
 	}
@@ -68,19 +66,18 @@ public:
     Info GetInfo()const
 	{
 		Info result;
-		Error::IfNegative(SDL_QueryTexture(texture, reinterpret_cast<uint32*>(&result.format), reinterpret_cast<int*>(&result.access), &result.size.x, &result.size.y));
+		Error::IfNegative(SDL_QueryTexture(texture, (uint32*)(&result.format), (int*)(&result.access), &result.size.x, &result.size.y));
 		return result;
 	}
-    void Update(const Surface& pixels, Point pos=Point(0,0))
+    void Update(const Surface& pixels, Point pos=Point())
 	{
-		SDL_Rect rectangle{pos.x,pos.y, int(pixels.Width()), int(pixels.Height())};
+		SDL_Rect rectangle{pos.x, pos.y, int(pixels.Width()), int(pixels.Height())};
 		Error::IfNegative(SDL_UpdateTexture(texture,&rectangle,pixels.surface->pixels, pixels.BytesPerLine()));
 	}
     static Texture LoadImg(const std::string& file, Renderer& rend)
 	{
 		Texture tmp;
-		tmp.texture=IMG_LoadTexture(rend.renderer, file.c_str());
-		Error::IfZero(tmp.texture);
+		tmp.texture=Error::IfZero(IMG_LoadTexture(rend.renderer, file.c_str()));
 		return (Texture&&)tmp;
 	}
 	void SetRGBMod(const Color& mod)
@@ -104,7 +101,7 @@ public:
 	{
         LockedData result;
         SDL_Rect rect=limit;
-        Error::IfNegative(SDL_LockTexture(texture, &rect, &result.pixels, &result.bytesPerLine));
+        Error::IfNegative(SDL_LockTexture(texture, &rect, &result.Pixels, &result.BytesPerLine));
         return result;
 	}
 };

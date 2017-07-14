@@ -5,9 +5,9 @@ void MessageBox::Show(const std::string& title, const std::string& message, Flag
 	Error::Condition(SDL_ShowSimpleMessageBox(uint32(flag), title.c_str(), message.c_str(), window?window->window:nullptr)<0);
 }
 
-std::string MessageBox::Dialog(const std::string& title, const std::string& message, const containers::DynArr<std::string>& buttons, size_t DefaultReturnkey, size_t DefaultEscapekey, Flags flag, ColorScheme* color, Window* window)
+std::string MessageBox::Dialog(const std::string& title, const std::string& message, const std::vector<std::string>& buttons, size_t DefaultReturnkey, size_t DefaultEscapekey, Flags flag, ColorScheme* color, Window* window)
 {
-	containers::DynArr<SDL_MessageBoxButtonData> buttonData(buttons.size());
+	std::vector<SDL_MessageBoxButtonData> buttonData(buttons.size());
 	for(size_t i=0; i<buttons.size(); ++i)
 	{
 		buttonData[i].flags=0;
@@ -23,7 +23,7 @@ std::string MessageBox::Dialog(const std::string& title, const std::string& mess
 		buttonData[i].text=buttons[i].c_str();
 	}
 	int index=0;
-	auto data=new SDL_MessageBoxData{uint32(flag),window?window->window:nullptr,title.c_str(),message.c_str(),int(buttonData.size()),buttonData.begin(), color};
+	auto data=new SDL_MessageBoxData{uint32(flag),window?window->window:nullptr, title.c_str(), message.c_str(), int(buttonData.size()), buttonData.data(), color};
 	if(SDL_ShowMessageBox(data, &index)<0)
 	{
 		delete data;

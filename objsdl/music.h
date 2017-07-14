@@ -3,7 +3,7 @@
 template<typename T>
 struct Sound
 {
-	containers::DynArr<T> data;
+	std::vector<T> data;
 	size_t Write(T* stream, size_t streamsize, size_t pos)const
 	{
 		for(size_t i=0;i<streamsize;++i)

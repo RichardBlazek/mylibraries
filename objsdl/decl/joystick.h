@@ -1,12 +1,10 @@
 #pragma once
 
-class Joystick
+class Joystick: public NonCopyable
 {
 private:
     SDL_Joystick* joystick;
 public:
-    Joystick(const Joystick&)=delete;
-    Joystick& operator=(const Joystick&)=delete;
 	using GUID=SDL_JoystickGUID;
     enum class HatState: uint8
     {
@@ -20,7 +18,7 @@ public:
         RightDown=Right|Down,
         LeftDown=Left|Down
     };
-	enum class Power: uint8
+	enum class Power: int8
 	{
 		Unknown=SDL_JOYSTICK_POWER_UNKNOWN,
 		Empty=SDL_JOYSTICK_POWER_EMPTY,
@@ -42,7 +40,7 @@ public:
     Joystick(int device_index);
     ~Joystick();
     std::string Name();
-    static std::string NameFromIndex(int device_index);
+    static std::string NameOf(int device_index);
     uint32 GetId();
     uint32 NumAxes();
     uint32 NumBalls();

@@ -67,6 +67,23 @@ public:
 		vct.cap=0;
 		return *this;
 	}
+	DynArr(const vector<typ>& init):DynArr(init.size())
+	{
+		std::copy(init.begin(), init.end(), begin());
+	}
+	DynArr(vector<typ>&& init):DynArr(init.size())
+	{
+		for(size_t i=0;i<len;++i)
+		{
+            alloc[i]=func::Move(init[i]);
+		}
+	}
+	operator vector<typ>()const
+	{
+		vector<typ> array(len);
+		std::copy(begin(), end(), array.begin());
+		return func::Move(array);
+	}
 	size_t size()const noexcept
 	{
 		return len;
