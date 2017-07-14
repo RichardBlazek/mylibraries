@@ -49,13 +49,14 @@ public:
 	}
 	AudioDevice(AudioDevice&& device):id(device.id)
 	{
-		device.id=nullptr;
+		device.id=0;
 	}
 	AudioDevice& operator=(AudioDevice&& device)
 	{
 		Close();
 		id=device.id;
-		device.id=nullptr;
+		device.id=0;
+		return *this;
 	}
 	Status GetStatus()
 	{

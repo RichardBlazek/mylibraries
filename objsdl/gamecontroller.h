@@ -170,13 +170,13 @@ public:
 	}
 	int16 GetAxis(Axis axis)
 	{
-		int16 value=SDL_GameControllerGetAxis(gcon, sdlAxis(axis));
+		int16 value=SDL_GameControllerGetAxis(gcon, SDL_GameControllerAxis(axis));
 		Error::Condition(value==0&&!std::string(SDL_GetError()).empty());
 		return value;
 	}
 	bool GetButton(Button button)
 	{
-		bool value=SDL_GameControllerGetButton(gcon, sdlButton(button));
+		bool value=SDL_GameControllerGetButton(gcon, SDL_GameControllerButton(button));
 		Error::Condition(!value&&!std::string(SDL_GetError()).empty());
 		return value;
 	}
@@ -190,17 +190,17 @@ public:
 	}
 	static std::string StringFromAxis(Axis axis)
 	{
-		auto str=SDL_GameControllerGetStringForAxis(sdlAxis(axis));
+		auto str=SDL_GameControllerGetStringForAxis(SDL_GameControllerAxis(axis));
         return std::string(str?str:"");
 	}
 	static std::string StringFromButton(Button button)
 	{
-		auto str=SDL_GameControllerGetStringForButton(sdlButton(button));
+		auto str=SDL_GameControllerGetStringForButton(SDL_GameControllerButton(button));
         return std::string(str?str:"");
 	}
 	Bind GetBindForAxis(Axis axis)
 	{
-        auto bind=SDL_GameControllerGetBindForAxis(gcon, sdlAxis(axis));
+        auto bind=SDL_GameControllerGetBindForAxis(gcon, SDL_GameControllerAxis(axis));
         Bind result;
         result.ValueType=Bind::Type(bind.bindType);
         if(result.ValueType==Bind::Type::Axis)
@@ -220,7 +220,7 @@ public:
 	}
 	Bind GetBindForButton(Button button)
 	{
-        auto bind=SDL_GameControllerGetBindForButton(gcon, sdlButton(button));
+        auto bind=SDL_GameControllerGetBindForButton(gcon, SDL_GameControllerButton(button));
         Bind result;
         result.ValueType=Bind::Type(bind.bindType);
         if(result.ValueType==Bind::Type::Axis)

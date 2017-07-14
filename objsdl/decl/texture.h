@@ -3,7 +3,7 @@
 class Texture: public NonCopyable
 {
 private:
-    SDL_Texture* texture;
+    SDL_Texture* texture=nullptr;
 public:
 	enum class Access
 	{
@@ -29,7 +29,7 @@ public:
         int BytesPerLine;
 	};
 	friend Renderer;
-    Texture()noexcept:texture(nullptr){}
+    Texture()noexcept=default;
     ~Texture()noexcept
 	{
 		Destroy();

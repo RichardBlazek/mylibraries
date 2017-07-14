@@ -5,6 +5,26 @@ class Haptic: public NonCopyable
 private:
 	SDL_Haptic* haptic=nullptr;
 public:
+	friend Effect;
+	static constexpr uint32 Infinity=SDL_HAPTIC_INFINITY;
+	enum class Feature: uint16
+	{
+		Constant=SDL_HAPTIC_CONSTANT,
+		Sine=SDL_HAPTIC_SINE,
+		LeftRight=SDL_HAPTIC_LEFTRIGHT,
+		Triangle=SDL_HAPTIC_TRIANGLE,
+		SawToothUp=SDL_HAPTIC_SAWTOOTHUP,
+		SawToothDown=SDL_HAPTIC_SAWTOOTHDOWN,
+		Ramp=SDL_HAPTIC_RAMP,
+		Spring=SDL_HAPTIC_SPRING,
+		Damper=SDL_HAPTIC_DAMPER,
+		Inertia=SDL_HAPTIC_INERTIA,
+		Custom=SDL_HAPTIC_CUSTOM,
+		Gain=SDL_HAPTIC_GAIN,
+		Autocenter=SDL_HAPTIC_AUTOCENTER,
+		Status=SDL_HAPTIC_STATUS,
+		Pause=SDL_HAPTIC_PAUSE
+	};
 	struct Direction
 	{
 		enum class Type: uint8
@@ -35,7 +55,7 @@ public:
 	{		
 		int16 force;
 	private:
-		friend Haptic;
+		friend Effect;
 		operator SDL_HapticEffect()const noexcept
 		{
 			return SDL_HapticEffect{constant: SDL_HapticConstant{SDL_HAPTIC_CONSTANT, SDL_HapticDirection{uint8(direction.type), dir}, duration, delay, trigger_button, trigger_interval, force, attack_duration, force_before_attack, fade_duration, force_after_fade}};
@@ -43,21 +63,14 @@ public:
 	};
 	struct PeriodEffect: public EffectBase
 	{
-		enum class WaveShape: uint8
-		{
-			Sine=SDL_HAPTIC_SINE,
-			Triangle=SDL_HAPTIC_TRIANGLE,
-			SawToothUp=SDL_HAPTIC_SAWTOOTHUP,
-			SawToothDown=SDL_HAPTIC_SAWTOOTHDOWN
-		};
-		WaveShape wave_shape;
+		Feature wave_shape;
 		
 		uint16 period;
 		int16 magnitude;
 		int16 offset;
 		uint16 phase;
 	private:
-		friend Haptic;
+		friend Effect;
 		operator SDL_HapticEffect()const noexcept
 		{
 			return SDL_HapticEffect{periodic: SDL_HapticPeriodic{uint16(wave_shape), SDL_HapticDirection{uint8(direction.type), dir}, duration, delay, trigger_button, trigger_interval, period, magnitude, offset, phase, attack_duration, force_before_attack, fade_duration, force_after_fade}};
@@ -69,7 +82,7 @@ public:
 		uint16 period;
 		vector<uint16> data;
 	private:
-		friend Haptic;
+		friend Effect;
 		operator SDL_HapticEffect()const noexcept
 		{
 			return SDL_HapticEffect{custom: SDL_HapticCustom{SDL_HAPTIC_CUSTOM, SDL_HapticDirection{uint8(direction.type), dir}, duration, delay, trigger_button, trigger_interval, axes, period, data.size()/axes, data.data(), attack_duration, force_before_attack, fade_duration, force_after_fade}};
@@ -80,7 +93,7 @@ public:
 		int16 start_force;
 		int16 end_force;
 	private:
-		friend Haptic;
+		friend Effect;
 		operator SDL_HapticEffect()const noexcept
 		{
 			return SDL_HapticEffect{ramp: SDL_HapticRamp{SDL_HAPTIC_RAMP, SDL_HapticDirection{uint8(effect.direction.type), dir}, effect.duration, effect.delay, effect.trigger_button, effect.trigger_interval, effect.start, effect.end, effect.attack_duration, effect.force_before_attack, effect.fade_duration, effect.force_after_fade}};
@@ -88,14 +101,7 @@ public:
 	};
 	struct ConditionEffect
 	{
-		enum class Type: uint16
-		{
-			Spring=SDL_HAPTIC_SPRING,
-			Damper=SDL_HAPTIC_DAMPER,
-			Inertia=SDL_HAPTIC_INERTIA,
-			Friction=SDL_HAPTIC_FRICTION
-		};
-		Type type;
+		Feature type;
 		
 		uint32 duration;
 		uint16 delay;
@@ -110,7 +116,7 @@ public:
 		uint16 dead_zone_size;
 		int16 dead_zone_center;
 	private:
-		friend Haptic;
+		friend Effect;
 		operator SDL_HapticEffect()const noexcept
 		{
 			return SDL_HapticEffect{condition: SDL_HapticCondition{uint16(type), SDL_HapticDirection{uint8(direction.type), dir}, duration, delay, trigger_button, trigger_interval, to_right_level, to_left_level, to_right_speed, to_left_speed, dead_zone_size, dead_zone_center}};
@@ -123,7 +129,7 @@ public:
 		uint16 large_motor_magnitude;
 		uint16 small_motor_magnitude;
 	private:
-		friend Haptic;
+		friend Effect;
 		operator SDL_HapticEffect()const noexcept
 		{
 			return SDL_HapticEffect{leftright: SDL_HapticLeftRight{SDL_HAPTIC_LEFTRIGHT, length, large_motor_magnitude, small_motor_magnitude}};
@@ -166,6 +172,12 @@ public:
 		Error::Condition(!std::string(SDL_GetError()).empty());
 		return opened;
 	}
+	static bool IsMouseHaptic()
+	{
+		bool tmp=SDL_MouseIsHaptic();
+		Error::Condition(!std::string(SDL_GetError()).empty());
+		return tmp;
+	}
 	uint32 GetIndex()
 	{
 		return Error::IfNegative(SDL_HapticIndex(haptic));
@@ -173,6 +185,10 @@ public:
 	static std::string GetName(uint32 device_index)
 	{
 		return std::string(Error::IfZero(SDL_HapticIndex(device_index)));
+	}
+	std::string GetName()
+	{
+		return GetName(GetIndex());
 	}
 	static uint32 Count()
 	{
@@ -210,38 +226,117 @@ public:
 	{
 	private:
 		uint32 id;
-		Effect(uint32 id):id(id){}
+		Haptic& haptic;
 	public:
-
-	};
-	Effect NewEffect(ConstantEffect effect)
+		Effect(Haptic& haptic, ConstantEffect effect):haptic(haptic)
+		{
+			SDL_HapticEffect sdl=effect;
+			id=Error::IfNegative(SDL_HapticNewEffect(haptic.haptic, &sdl));
+		}
+		Effect(Haptic& haptic, ConditionEffect effect)
+		{
+			SDL_HapticEffect sdl=effect;
+			id=Error::IfNegative(SDL_HapticNewEffect(haptic.haptic, &sdl));
+		}
+		Effect(Haptic& haptic, CustomEffect effect)
+		{
+			SDL_HapticEffect sdl=effect;
+			id=Error::IfNegative(SDL_HapticNewEffect(haptic.haptic, &sdl));
+		}
+		Effect(Haptic& haptic, LeftRightEffect effect)
+		{
+			SDL_HapticEffect sdl=effect;
+			id=Error::IfNegative(SDL_HapticNewEffect(haptic.haptic, &sdl));
+		}
+		Effect(Haptic& haptic, PeriodEffect effect)
+		{
+			SDL_HapticEffect sdl=effect;
+			id=Error::IfNegative(SDL_HapticNewEffect(haptic.haptic, &sdl));
+		}
+		Effect(Haptic& haptic, RampEffect effect)
+		{
+			SDL_HapticEffect sdl=effect;
+			id=Error::IfNegative(SDL_HapticNewEffect(haptic.haptic, &sdl));
+		}
+		~Effect()
+		{
+			SDL_HapticDestroyEffect(haptic.haptic, id);
+		}
+		void Update(ConstantEffect effect)
+		{
+			SDL_HapticEffect sdl=effect;
+			Error::IfNegative(SDL_HapticUpdateEffect(haptic.haptic, id, &sdl));
+		}
+		void Update(ConditionEffect effect)
+		{
+			SDL_HapticEffect sdl=effect;
+			Error::IfNegative(SDL_HapticUpdateEffect(haptic.haptic, id, &sdl));
+		}
+		void Update(CustomEffect effect)
+		{
+			SDL_HapticEffect sdl=effect;
+			Error::IfNegative(SDL_HapticUpdateEffect(haptic.haptic, id, &sdl));
+		}
+		void Update(LeftRightEffect effect)
+		{
+			SDL_HapticEffect sdl=effect;
+			Error::IfNegative(SDL_HapticUpdateEffect(haptic.haptic, id, &sdl));
+		}
+		void Update(PeriodEffect effect)
+		{
+			SDL_HapticEffect sdl=effect;
+			Error::IfNegative(SDL_HapticUpdateEffect(haptic.haptic, id, &sdl));
+		}
+		void Update(RampEffect effect)
+		{
+			SDL_HapticEffect sdl=effect;
+			Error::IfNegative(SDL_HapticUpdateEffect(haptic.haptic, id, &sdl));
+		}
+		void Run(uint32 iterations=Infinity)
+		{
+			Error::IfNegative(SDL_HapticRunEffect(haptic.haptic, id, iterations));
+		}
+		void Stop()
+		{
+			Error::IfNegative(SDL_HapticStopEffect(haptic.haptic, id));
+		}
+		bool IsPlaying()
+		{
+			return Error::IfNegative(SDL_HapticGetEffectStatus(haptic.haptic, id));
+		}
+	};	
+	void StopAll()
 	{
-		SDL_HapticEffect sdl=effect;
-		return Effect(Error::IfNegative(SDL_HapticNewEffect(haptic, &sdl)));
+		Error::IfNegative(SDL_HapticStopAll(haptic));
 	}
-	Effect NewEffect(ConditionEffect effect)
+	void Pause()
 	{
-		SDL_HapticEffect sdl=effect;
-		return Effect(Error::IfNegative(SDL_HapticNewEffect(haptic, &sdl)));
+		Error::IfNegative(SDL_HapticPause(haptic));
 	}
-	Effect NewEffect(CustomEffect effect)
+	void Resume()
 	{
-		SDL_HapticEffect sdl=effect;
-		return Effect(Error::IfNegative(SDL_HapticNewEffect(haptic, &sdl)));
+		Error::IfNegative(SDL_HapticUnpause(haptic));
 	}
-	Effect NewEffect(LeftRightEffect effect)
+	void SetAutocenter(uint8 autocenter)
 	{
-		SDL_HapticEffect sdl=effect;
-		return Effect(Error::IfNegative(SDL_HapticNewEffect(haptic, &sdl)));
+		Error::IfNegative(SDL_HapticSetAutocenter(haptic, autocenter));
 	}
-	Effect NewEffect(PeriodEffect effect)
+	void SetGain(uint8 gain)
 	{
-		SDL_HapticEffect sdl=effect;
-		return Effect(Error::IfNegative(SDL_HapticNewEffect(haptic, &sdl)));
+		Error::IfNegative(SDL_HapticSetGain(haptic, gain));
 	}
-	Effect NewEffect(RampEffect effect)
+	static uint8 GetMaxGain()
 	{
-		SDL_HapticEffect sdl=effect;
-		return Effect(Error::IfNegative(SDL_HapticNewEffect(haptic, &sdl)));
+		return SDL_HAPTIC_GAIN_MAX;
+	}
+	static void SetMaxGain(uint8 gain)
+	{
+		SDL_HAPTIC_GAIN_MAX=gain;
+	}
+	Feature GetSupportedFeatures()
+	{
+		uint32 tmp=SDL_HapticQuery(haptic);
+		Error::Condition(!std::string(SDL_GetError()).empty());
+		return Feature(tmp);
 	}
 };

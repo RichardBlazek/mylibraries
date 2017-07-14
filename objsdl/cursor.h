@@ -70,11 +70,11 @@ public:
 	}
 	static void EnableCapturing()
 	{
-		Error::Condition(SDL_CaptureMouse(SDL_TRUE)<0);
+		Error::IfNegative(SDL_CaptureMouse(SDL_TRUE));
 	}
 	static void DisableCapturing()
 	{
-		Error::Condition(SDL_CaptureMouse(SDL_FALSE)<0);
+		Error::IfNegative(SDL_CaptureMouse(SDL_FALSE));
 	}
 	static Point Position()
 	{
@@ -101,5 +101,9 @@ public:
 	static bool IsPressed()
 	{
 		return PressedButtons()!=MouseButtonMask::None;
+	}
+	static bool IsPressed(MouseButtonMask button)
+	{
+		return (PressedButtons()&button)==button;
 	}
 };
