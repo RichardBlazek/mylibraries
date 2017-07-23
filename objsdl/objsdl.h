@@ -6,7 +6,9 @@
 #include <cstdlib>
 #include <functional>
 #include <vector>
+
 #include "func.h"
+#include "geometry.h"
 #include "types.h"
 #include "nocopy.h"
 

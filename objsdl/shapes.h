@@ -1,14 +1,9 @@
 #pragma once
 
-#include "geometry.h"
-
 constexpr double pi=geometry::pi<double>;
 
-using geometry::RadToDeg;
-using geometry::DegToRad;
-
 using Angle=geometry::Angle<double>;
-using Point=geometry::Point<int>;
-using Line=geometry::Line<int, double>;
-using Vector=geometry::Vector<int, double, double>;
-using Circle=geometry::Circle<int, double, double>;
+using Point=geometry::coordinates::Cartesian<int>;
+using Line=geometry::Line<Point, double>;
+using Vector=geometry::Vector<Point, double, double>;
+using Circle=geometry::Circle<Point, double, double>;
