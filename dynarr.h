@@ -67,20 +67,22 @@ public:
 		vct.cap=0;
 		return *this;
 	}
-	DynArr(const vector<typ>& init):DynArr(init.size())
+	template<typename Cont>
+	DynArr(const Cont& init):DynArr(init.size())
 	{
 		std::copy(init.begin(), init.end(), begin());
 	}
-	DynArr(vector<typ>&& init):DynArr(init.size())
+	template<typename Cont>
+	DynArr(Cont&& init):DynArr(init.size())
 	{
 		for(size_t i=0;i<len;++i)
 		{
             alloc[i]=func::Move(init[i]);
 		}
 	}
-	operator vector<typ>()const
+	operator std::vector<typ>()const
 	{
-		vector<typ> array(len);
+		std::vector<typ> array(len);
 		std::copy(begin(), end(), array.begin());
 		return func::Move(array);
 	}

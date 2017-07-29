@@ -175,17 +175,6 @@ public:
 	{
 		return surface->format->palette->ncolors;
 	}
-	void Repaint(const Color& col);
-	Color GetPixel(const Point& xy)const
-	{
-		Color result;
-		SDL_GetRGBA(GetPixelRawValue(xy), surface->format, &result.r, &result.g, &result.b, &result.a);
-		return result;
-	}
-	void SetPixel(const Point& xy, const Color& col)
-	{
-		SetPixelRawValue(xy, SDL_MapRGBA(surface->format, col.r, col.g, col.b, col.a));
-	}
 	uint8& Index8(const Point& xy)
 	{
 		if(BitsPerPixel()!=8)
@@ -194,9 +183,20 @@ public:
 		}
 		return *Index(xy);
 	}
-    void DrawLine(const Line& line, const Color& col);
-    void DrawRect(const Rect& rectangle, const Color& col);
-    void FillRect(const Rect& rectangle, const Color& col);
+	Color GetPixel(const Point& xy)const
+	{
+		Color result;
+		SDL_GetRGBA(GetPixelRawValue(xy), surface->format, &result.r, &result.g, &result.b, &result.a);
+		return result;
+	}
+	void Repaint(const Color& col);
+	void Draw(const Point& xy, const Color& col)
+	{
+		SetPixelRawValue(xy, SDL_MapRGBA(surface->format, col.r, col.g, col.b, col.a));
+	}
+    void Draw(const Line& line, const Color& col);
+    void DrawBorder(const Rect& rectangle, const Color& col);
+    void Draw(const Rect& rectangle, const Color& col);
     uint32 BytesPerLine()const noexcept
 	{
 		return surface->pitch;
@@ -246,7 +246,7 @@ public:
 		result.surface=SDL_ConvertSurfaceFormat(surface,uint32(desired),0);
 		return result;
 	}
-	void DrawCircle(const Circle& circle, const Color& color)
+	void DrawBorder(const Circle& circle, const Color& color)
 	{
 		Point pos=circle.center;
 		float angle=0;
@@ -255,17 +255,17 @@ public:
 		{
 			pos.x=circle.center.x+circle.radius*SDL_cos(angle);
 			pos.y=circle.center.y+circle.radius*SDL_sin(angle);
-			SetPixel(pos, color);
+			Draw(pos, color);
 			angle+=angle_stepsize;
 		}
 	}
-	void DrawText(Font& font, const std::string& u8text, const Color& textcolor, Point dst);
-	void DrawText(Font& font, const std::u16string& u16text, const Color& textcolor, Point dst);
-	void DrawText(Font& font, char16_t character, const Color& textcolor, Point dst);
-	void DrawText(Font& font, const std::string& u8text, const Color& textcolor, Point dst, const Color& backgroundcolor);
-	void DrawText(Font& font, const std::u16string& u16text, const Color& textcolor, Point dst, const Color& backgroundcolor);
-	void DrawText(Font& font, char16_t character, const Color& textcolor, Point dst, const Color& backgroundcolor);
-	void DrawTextFast(Font& font, const std::string& u8text, const Color& textcolor, Point dst);
-	void DrawTextFast(Font& font, const std::u16string& u16text, const Color& textcolor, Point dst);
-	void DrawTextFast(Font& font, char16_t character, const Color& textcolor, Point dst);
+	void Draw(Font& font, const std::string& u8text, const Color& textcolor, Point dst);
+	void Draw(Font& font, const std::u16string& u16text, const Color& textcolor, Point dst);
+	void Draw(Font& font, char16_t character, const Color& textcolor, Point dst);
+	void Draw(Font& font, const std::string& u8text, const Color& textcolor, Point dst, const Color& backgroundcolor);
+	void Draw(Font& font, const std::u16string& u16text, const Color& textcolor, Point dst, const Color& backgroundcolor);
+	void Draw(Font& font, char16_t character, const Color& textcolor, Point dst, const Color& backgroundcolor);
+	void DrawFast(Font& font, const std::string& u8text, const Color& textcolor, Point dst);
+	void DrawFast(Font& font, const std::u16string& u16text, const Color& textcolor, Point dst);
+	void DrawFast(Font& font, char16_t character, const Color& textcolor, Point dst);
 };

@@ -5,6 +5,8 @@
 #include <cmath>
 #include <cstdlib>
 #include <functional>
+#include <chrono>
+#include <thread>
 #include <vector>
 
 #include "func.h"

@@ -120,6 +120,10 @@ namespace geometry
 			constexpr Cartesian()=default;
 			constexpr Cartesian(typ xpos, typ ypos)
 				:x(xpos), y(ypos) {}
+
+			template<typename T>
+			constexpr Cartesian(const Cartesian<T>& second)
+				:Cartesian(T(second.x), T(second.y)) {}
 			constexpr bool operator==(const Cartesian& second)const noexcept
 			{
 				return x==second.x&&y==second.y;

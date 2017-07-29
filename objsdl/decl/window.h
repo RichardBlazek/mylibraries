@@ -53,7 +53,7 @@ public:
 		Shown=SDL_WINDOW_SHOWN,					///window is visible
 		Hidden=SDL_WINDOW_HIDDEN,				///window is not visible
 		Borderless=SDL_WINDOW_BORDERLESS,		///no window decoration
-		Resizeable=SDL_WINDOW_RESIZABLE,		///window can be resized
+		Resizable=SDL_WINDOW_RESIZABLE,		///window can be resized
 		Minimized=SDL_WINDOW_MINIMIZED,			///window is minimized
 		Maximized=SDL_WINDOW_MAXIMIZED,			///window is maximized
 		InputGrabbed=SDL_WINDOW_INPUT_GRABBED,	///window has grabbed input focus

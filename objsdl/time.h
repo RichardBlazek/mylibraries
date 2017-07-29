@@ -16,14 +16,35 @@ uint64 TicksPerSec()noexcept
 {
     return SDL_GetPerformanceFrequency();
 }
-using TimerCallback=SDL_TimerCallback;//uint32(*)(uint32,void*)
-int AddTimer(uint32 interval, TimerCallback callback, void* param)
+class Timer
 {
-	interval=SDL_AddTimer(interval, callback, param);
-	Error::IfZero(interval);
-    return interval;
-}
-void RemoveTimer(int ID)
-{
-    Error::IfZero(SDL_RemoveTimer(ID));
-}
+private:
+	SDL_TimerID id=0;
+	static uint32 SDL_Callback(uint32 interval, void* param)
+	{
+		return (*(std::function<uint32(uint32)>*)param)(interval);
+	}
+public:
+	Timer()=default;
+	void Add(uint32 interval, std::function<uint32(uint32)> callback)
+	{
+		Remove();
+		id=Error::IfZero(SDL_AddTimer(interval, SDL_Callback, (void*)&callback));
+	}
+	void Remove()
+	{
+		if(id!=0)
+		{
+			SDL_RemoveTimer(id);
+			id=0;
+		}
+	}
+	Timer(uint32 interval, std::function<uint32(uint32)> callback)
+	{
+		Add(interval, callback);
+	}
+	~Timer()
+	{
+		Remove();
+	}
+};

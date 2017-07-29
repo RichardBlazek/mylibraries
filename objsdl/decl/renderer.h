@@ -125,41 +125,6 @@ public:
 			angle+=angle_stepsize;
 		}
 	}
-	void Draw(const std::vector<Point>& objects, const Color& col)
-	{
-		for(auto& x:objects)
-		{
-			Draw(x, col);
-		}
-	}
-	void Draw(const std::vector<Line>& objects, const Color& col)
-	{
-		for(auto& x:objects)
-		{
-			Draw(x, col);
-		}
-	}
-	void Draw(const std::vector<Rect>& objects, const Color& col)
-	{
-		for(auto& x:objects)
-		{
-			Draw(x, col);
-		}
-	}
-	void DrawBorder(const std::vector<Rect>& objects, const Color& col)
-	{
-		for(auto& x:objects)
-		{
-			DrawBorder(x, col);
-		}
-	}
-	void DrawBorder(const std::vector<Circle>& objects, const Color& col)
-	{
-		for(auto& x:objects)
-		{
-			DrawBorder(x, col);
-		}
-	}
 	void Repaint(const Color& col)
 	{
 		SetDrawColor(col);
