@@ -16,4 +16,5 @@ namespace gui
 	#include "gui/button.h"
 	#include "gui/chars.h"
 	#include "gui/textinputbox.h"
+	#include "gui/dialog.h"
 }

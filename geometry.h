@@ -183,7 +183,7 @@ namespace geometry
 			}
 		};
 		template<typename length_typ, typename Real>
-		class Polar
+		struct Polar
 		{
 			using angle_typ=Angle<Real>;
 			length_typ lenght=0;
@@ -287,6 +287,8 @@ namespace geometry
 
 		constexpr Vector(const point_typ& begin, const vector_typ& move)
 			:begin(begin), move(move) {}
+		constexpr Vector(const point_typ& begin, length_typ lenght, Angle<Real> angle)
+			:begin(begin), move(lenght, angle) {}
 
 		constexpr explicit Vector(const line_typ& ln)
 			:begin(ln.begin), move(ln.end-ln.begin){}

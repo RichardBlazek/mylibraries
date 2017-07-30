@@ -67,13 +67,13 @@ public:
 		vct.cap=0;
 		return *this;
 	}
-	template<typename Cont>
-	DynArr(const Cont& init):DynArr(init.size())
+	template<template<typename...> class Cont>
+	DynArr(const Cont<typ>& init):DynArr(init.size())
 	{
 		std::copy(init.begin(), init.end(), begin());
 	}
-	template<typename Cont>
-	DynArr(Cont&& init):DynArr(init.size())
+	template<template<typename...> class Cont>
+	DynArr(Cont<typ>&& init):DynArr(init.size())
 	{
 		for(size_t i=0;i<len;++i)
 		{
