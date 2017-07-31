@@ -224,7 +224,7 @@ public:
 		return SDL_GetClipRect(surface, &rect);
 	}
     void Blit(Surface&, const Rect*,const Rect*);
-    void Paste(Surface&, const Rect*,const Rect*);
+    void Draw(Surface&, const Rect*,const Rect*);
     void EnableColorKey(const Color& col);
     void DisableColorKey(const Color& col);
     void SetRGBMod(const Color::WithoutAlpha& col);

@@ -55,7 +55,7 @@ void Surface::Blit(Surface& second, const Rect* source, const Rect* destination)
 	SDL_Rect r1=source?*source:Rect(), r2=destination?*destination:Rect();
     Error::Condition(SDL_BlitSurface(surface, source?&r1:nullptr, second.surface, destination?&r2:nullptr)<0);
 }
-void Surface::Paste(Surface& second, const Rect* source, const Rect* destination)
+void Surface::Draw(Surface& second, const Rect* source, const Rect* destination)
 {
 	SDL_Rect r1=source?*source:Rect(), r2=destination?*destination:Rect();
     Error::Condition(SDL_BlitScaled(surface, source?&r1:nullptr, second.surface, destination?&r2:nullptr)<0);
@@ -198,53 +198,53 @@ void Surface::Draw(Font& font, const std::string& u8text, const Color& textcolor
 {
 	Surface textimage=font.Render(u8text, textcolor);
 	Rect destination(dst, textimage.Size());
-	Paste(textimage, nullptr, &destination);
+	Draw(textimage, nullptr, &destination);
 }
 void Surface::Draw(Font& font, const std::u16string& u16text, const Color& textcolor, Point dst)
 {
 	Surface textimage=font.Render(u16text, textcolor);
 	Rect destination(dst, textimage.Size());
-	Paste(textimage, nullptr, &destination);
+	Draw(textimage, nullptr, &destination);
 }
 void Surface::Draw(Font& font, char16_t character, const Color& textcolor, Point dst)
 {
 	Surface textimage=font.Render(character, textcolor);
 	Rect destination(dst, textimage.Size());
-	Paste(textimage, nullptr, &destination);
+	Draw(textimage, nullptr, &destination);
 }
 void Surface::Draw(Font& font, const std::string& u8text, const Color& textcolor, Point dst, const Color& backgroundcolor)
 {
 	Surface textimage=font.Render(u8text, textcolor, backgroundcolor);
 	Rect destination(dst, textimage.Size());
-	Paste(textimage, nullptr, &destination);
+	Draw(textimage, nullptr, &destination);
 }
 void Surface::Draw(Font& font, const std::u16string& u16text, const Color& textcolor, Point dst, const Color& backgroundcolor)
 {
 	Surface textimage=font.Render(u16text, textcolor, backgroundcolor);
 	Rect destination(dst, textimage.Size());
-	Paste(textimage, nullptr, &destination);
+	Draw(textimage, nullptr, &destination);
 }
 void Surface::Draw(Font& font, char16_t character, const Color& textcolor, Point dst, const Color& backgroundcolor)
 {
 	Surface textimage=font.Render(character, textcolor, backgroundcolor);
 	Rect destination(dst, textimage.Size());
-	Paste(textimage, nullptr, &destination);
+	Draw(textimage, nullptr, &destination);
 }
 void Surface::DrawFast(Font& font, const std::string& u8text, const Color& textcolor, Point dst)
 {
 	Surface textimage=font.RenderFast(u8text, textcolor);
 	Rect destination(dst, textimage.Size());
-	Paste(textimage, nullptr, &destination);
+	Draw(textimage, nullptr, &destination);
 }
 void Surface::DrawFast(Font& font, const std::u16string& u16text, const Color& textcolor, Point dst)
 {
 	Surface textimage=font.RenderFast(u16text, textcolor);
 	Rect destination(dst, textimage.Size());
-	Paste(textimage, nullptr, &destination);
+	Draw(textimage, nullptr, &destination);
 }
 void Surface::DrawFast(Font& font, char16_t character, const Color& textcolor, Point dst)
 {
 	Surface textimage=font.RenderFast(character, textcolor);
 	Rect destination(dst, textimage.Size());
-	Paste(textimage, nullptr, &destination);
+	Draw(textimage, nullptr, &destination);
 }
