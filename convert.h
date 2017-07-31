@@ -1,36 +1,25 @@
 #pragma once
 
 #include <string>
+#include <stdexcept>
 
 #include "types.h"
 #include "mat.h"
 
-class
+namespace convert
 {
-private:
-    inline bool isDigit(char ch)const noexcept
-    {
-        return ch<='9'&&ch>='0';
-    }
-    bool fail=false;
-public:
-    inline bool GetFail()
-    {
-        return (fail)?fail=false, true:false;
-    }
-    uint64 Stoui(std::string text, uint8 base=10)///String TO Unsigned Int-----------------------------------------------------------
+    uint64 Stoui(std::string text)///String TO Unsigned Int-----------------------------------------------------------
     {
         uint64 number=0;
         for(auto c:text)
         {
-            if(isDigit(c))
+            if(isdigit(c))
             {
                 number=number*10+c-'0';
             }
             else
             {
-                fail=true;
-                return number;
+                throw std::invalid_argument("Conversion failed: '"+text+"' is not a number");
             }
         }
         return number;
@@ -65,7 +54,7 @@ public:
         }
 		for(uint16 i=beg;i<text.size();++i)
 		{
-			if(isDigit(text[i]))
+			if(isdigit(text[i]))
 			{
 				number=(number*10)+(text[i]-'0');
 			}
@@ -76,8 +65,7 @@ public:
 			}
 			else
 			{
-				fail=true;
-				return number;
+                throw std::invalid_argument("Conversion failed: '"+text+"' is not a number");
 			}
 		}
         if(pos>beg&&pos<text.size()-1)
@@ -85,21 +73,19 @@ public:
             double mocnina=10;
             for(uint16 i=pos;i<text.size();++i, mocnina*=10)
             {
-                if(isDigit(text[i]))
+                if(isdigit(text[i]))
                 {
                     number+=(text[i]-'0')/mocnina;
                 }
                 else
                 {
-                    fail=true;
-                    return number;
+                    throw std::invalid_argument("Conversion failed: '"+text+"' is not a number");
                 }
             }
         }
         else
         {
-            fail=true;
-            return number;
+            throw std::invalid_argument("Conversion failed: '"+text+"' is not a number");
         }
         if(zapor)
         {
@@ -130,4 +116,4 @@ public:
         std::string str=Itos(int64(number*math::Power(10, precision)));
         return str.substr(0,str.size()-precision-1)+dec_separ+str.substr(str.size()-precision);
     }
-}convert;
+}
