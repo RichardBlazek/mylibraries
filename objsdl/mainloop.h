@@ -1,6 +1,6 @@
 #pragma once
 
-void MainLoop(std::function<void(const Event&)> evt_handler, std::function<bool()> update, std::chrono::milliseconds looptime)
+void MainLoop(std::function<void(const Event&)> evt_handler, std::function<bool()> update, uint32 looptime)
 {
 	bool repeat=true;
 	Event evt;
