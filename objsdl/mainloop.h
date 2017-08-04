@@ -4,7 +4,7 @@ void MainLoop(std::function<void(const Event&)> evt_handler, std::function<bool(
 {
 	bool repeat=true;
 	Event evt;
-	std::chrono::steady_clock::time_point lasttime=steady_clock::now();
+	std::chrono::steady_clock::time_point lasttime=std::chrono::steady_clock::now();
 	while(SDL::Event::NotQuit()&&repeat)
 	{
 		evt.Call(evt_handler);
