@@ -41,14 +41,14 @@ public:
 		Destroy();
 	}
     Surface(const Surface& init)
-		:Surface(Width(), Height(), BitsPerPixel(), GetMasks())
+		:Surface(init.Size(), init.BitsPerPixel(), init.GetMasks())
 	{
 		std::copy((uint8*)init.surface->pixels, (uint8*)init.surface->pixels+BytesPerLine()*Height(), (uint8*)surface->pixels);
 	}
     Surface& operator=(const Surface& init)
 	{
 		Destroy();
-		Create(Width(), Height(), BitsPerPixel(), GetMasks());
+		Create(init.Size(), init.BitsPerPixel(), init.GetMasks());
 		std::copy((uint8*)init.surface->pixels, (uint8*)init.surface->pixels+BytesPerLine()*Height(), (uint8*)surface->pixels);
 		return *this;
 	}

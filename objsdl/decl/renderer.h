@@ -134,8 +134,8 @@ public:
 	void Draw(Texture& texture, const Rect* source, const Rect* destination);
 	void Draw(Surface& surface, const Rect* source, const Rect* destination);
 
-	void Draw(Texture& texture, const Rect* source, const Rect* destination, double angle, Point& center, Flip flip);
-	void Draw(Surface& surface, const Rect* source, const Rect* destination, double angle, Point& center, Flip flip);
+	void Draw(Texture& texture, const Rect* source, const Rect* destination, double angle, Point center, Flip flip);
+	void Draw(Surface& surface, const Rect* source, const Rect* destination, double angle, Point center, Flip flip);
 
 	void Draw(Texture& texture, const Rect* source, const Rect* destination, double angle, Flip flip);
 	void Draw(Surface& surface, const Rect* source, const Rect* destination, double angle, Flip flip);
