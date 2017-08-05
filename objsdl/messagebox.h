@@ -5,7 +5,7 @@ void MessageBox::Show(const std::string& title, const std::string& message, Flag
 	Error::Condition(SDL_ShowSimpleMessageBox(uint32(flag), title.c_str(), message.c_str(), window?window->window:nullptr)<0);
 }
 
-std::string MessageBox::Dialog(const std::string& title, const std::string& message, const std::vector<std::string>& buttons, size_t DefaultReturnkey, size_t DefaultEscapekey, Flags flag, ColorScheme* color, Window* window)
+size_t MessageBox::Dialog(const std::string& title, const std::string& message, const std::vector<std::string>& buttons, size_t DefaultReturnkey, size_t DefaultEscapekey, Flags flag, ColorScheme* color, Window* window)
 {
 	std::vector<SDL_MessageBoxButtonData> buttonData(buttons.size());
 	for(size_t i=0; i<buttons.size(); ++i)
@@ -30,5 +30,5 @@ std::string MessageBox::Dialog(const std::string& title, const std::string& mess
 		throw SDL::Error();
 	}
 	delete data;
-	return buttons[index];
+	return index;
 }

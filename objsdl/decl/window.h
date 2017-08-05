@@ -27,7 +27,7 @@ private:
 public:
 	friend Renderer;
 	friend void MessageBox::Show(const std::string&, const std::string&, Flags flag, SDL::Window*);
-	friend std::string MessageBox::Dialog(const std::string&, const std::string&, const std::vector<std::string>&, size_t, size_t, Flags, ColorScheme*, Window*);
+	friend size_t MessageBox::Dialog(const std::string&, const std::string&, const std::vector<std::string>&, size_t, size_t, Flags, ColorScheme*, Window*);
 	friend Cursor;
 	constexpr static int UndefinedPos=SDL_WINDOWPOS_UNDEFINED;
 	constexpr static int CenteredPos=SDL_WINDOWPOS_CENTERED;
