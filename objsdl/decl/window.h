@@ -23,14 +23,14 @@ class Window: public NonCopyable
 {
 private:
 	//Intern C window
-	SDL_Window* window;
+	SDL_Window* window=nullptr;
 public:
 	friend Renderer;
 	friend void MessageBox::Show(const std::string&, const std::string&, Flags flag, SDL::Window*);
 	friend size_t MessageBox::Dialog(const std::string&, const std::string&, const std::vector<std::string>&, size_t, size_t, Flags, ColorScheme*, Window*);
 	friend Cursor;
-	constexpr static int UndefinedPos=SDL_WINDOWPOS_UNDEFINED;
-	constexpr static int CenteredPos=SDL_WINDOWPOS_CENTERED;
+	constexpr static Point UndefinedPos=Point(SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED);
+	constexpr static Point CenteredPos=Point(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 	enum class HitTestResult: uint8
 	{
 		Normal=SDL_HITTEST_NORMAL,  ///Region has no special properties
@@ -70,9 +70,9 @@ public:
 		PopupMenu=SDL_WINDOW_POPUP_MENU			/// window should be treated as a popup menu
 	};
 	//Constructor
-	Window()noexcept:window(nullptr) {}
+	Window()=default;
 	//Constructor with parameters
-	Window(const std::string& title, int x, int y, int widht, int height, Flags flags=Flags::None);
+	Window(const std::string& title, Point pos, Point size, Flags flags=Flags::None);
 	//Move
 	Window(Window&&)noexcept;
 	Window& operator=(Window&&)noexcept;
@@ -80,7 +80,7 @@ public:
 	void Close()noexcept;
 	//If was Window destroyed, this function open it again
 	//If not, function destroy the window and open it again
-	void Open(std::string title, int x, int y, int widht, int height, uint32 flags);
+	void Open(std::string title, Point pos, Point size, Flags flags=Flags::None);
 	//Destructor
 	~Window()noexcept
 	{
@@ -117,7 +117,7 @@ public:
 		SDL_ShowWindow(window);
 	}
 	//Get position of Window
-	Point GetPos()noexcept
+	Point Position()noexcept
 	{
 		Point result;
 		SDL_GetWindowPosition(window, &result.x, &result.y);
@@ -127,7 +127,7 @@ public:
 	{
 		SDL_SetWindowPosition(window, newPoint.x, newPoint.y);
 	}
-	Point GetSize()noexcept
+	Point Size()noexcept
 	{
 		Point result;
 		SDL_GetWindowSize(window, &result.x, &result.y);

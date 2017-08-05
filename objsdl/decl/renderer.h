@@ -4,7 +4,7 @@
 class Renderer: public NonCopyable
 {
 private:
-	SDL_Renderer* renderer;
+	SDL_Renderer* renderer=nullptr;
 	///Set Draw Color of Renderer
 	void SetDrawColor(const Color& col)
 	{
@@ -49,7 +49,7 @@ public:
 	};
 	friend Texture;
 
-	Renderer()noexcept:renderer(nullptr) {}
+	Renderer()=default;
 	Renderer(Renderer&& init):renderer(init.renderer)
 	{
 		init.renderer=nullptr;

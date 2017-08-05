@@ -29,7 +29,7 @@ public:
         int BytesPerLine;
 	};
 	friend Renderer;
-    Texture()noexcept=default;
+    Texture()=default;
     ~Texture()noexcept
 	{
 		Destroy();
@@ -50,7 +50,7 @@ public:
 	{
 		Error::IfZero(texture);
 	}
-    Texture(Surface surface, Renderer& renderer)
+    Texture(Renderer& renderer, Surface surface)
 			:texture(SDL_CreateTextureFromSurface(renderer.renderer, surface.surface))
 	{
 		Error::IfZero(texture);
@@ -72,7 +72,7 @@ public:
     void Update(const Surface& pixels, Point pos=Point())
 	{
 		SDL_Rect rectangle{pos.x, pos.y, int(pixels.Width()), int(pixels.Height())};
-		Error::IfNegative(SDL_UpdateTexture(texture,&rectangle,pixels.surface->pixels, pixels.BytesPerLine()));
+		Error::IfNegative(SDL_UpdateTexture(texture, &rectangle,pixels.surface->pixels, pixels.BytesPerLine()));
 	}
     static Texture LoadImg(const std::string& file, Renderer& rend)
 	{

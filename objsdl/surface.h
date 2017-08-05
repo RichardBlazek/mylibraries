@@ -1,48 +1,48 @@
 #pragma once
 
-Surface::Surface(int widht, int height, uint8 depth, const Color* colors, size_t count)
+Surface::Surface(Point size, uint8 depth, const Color* colors, size_t count)
 {
-	Create(widht, height, depth, colors, count);
+	Create(size, depth, colors, count);
 }
-Surface::Surface(int widht, int height, uint8 depth, const Color* colors, size_t count, Pixel::Format format)
+Surface::Surface(Point size, uint8 depth, const Color* colors, size_t count, Pixel::Format format)
 {
-	Create(widht, height, depth, colors, count, format);
+	Create(size, depth, colors, count, format);
 }
-Surface::Surface(int width, int height, uint8 depth, Masks masks)
+Surface::Surface(Point size, uint8 depth, Masks masks)
 {
-	Create(width, height, depth, masks);
+	Create(size, depth, masks);
 }
-Surface::Surface(int width, int height, uint8 depth, Masks masks, Pixel::Format format)
+Surface::Surface(Point size, uint8 depth, Masks masks, Pixel::Format format)
 {
-	Create(width, height, depth, masks, format);
+	Create(size, depth, masks, format);
 }
 
-void Surface::Create(int width, int height, uint8 depth, const Color* colors, size_t count)
+void Surface::Create(Point size, uint8 depth, const Color* colors, size_t count)
 {
     Destroy();
-    surface=SDL_CreateRGBSurface(0,width,height,depth, 0, 0, 0, 0);
+    surface=SDL_CreateRGBSurface(0,size.x,size.y,depth, 0, 0, 0, 0);
 	Error::IfZero(surface);
 	if(colors)
 		SetPalette(colors, count);
 }
-void Surface::Create(int width, int height, uint8 depth, const Color* colors, size_t count, Pixel::Format format)
+void Surface::Create(Point size, uint8 depth, const Color* colors, size_t count, Pixel::Format format)
 {
 	Destroy();
-    surface=SDL_CreateRGBSurfaceWithFormat(0,width,height,depth, uint32(format));
+    surface=SDL_CreateRGBSurfaceWithFormat(0,size.x,size.y,depth, uint32(format));
 	Error::IfZero(surface);
 	if(colors)
 		SetPalette(colors, count);
 }
-void Surface::Create(int width, int height, uint8 depth, Masks masks)
+void Surface::Create(Point size, uint8 depth, Masks masks)
 {
     Destroy();
-    surface=SDL_CreateRGBSurface(0,width,height,depth, BE_ToNative(masks.r), BE_ToNative(masks.g), BE_ToNative(masks.b), BE_ToNative(masks.a));
+    surface=SDL_CreateRGBSurface(0,size.x,size.y,depth, BE_ToNative(masks.r), BE_ToNative(masks.g), BE_ToNative(masks.b), BE_ToNative(masks.a));
 	Error::IfZero(surface);
 }
-void Surface::Create(int width, int height, uint8 depth, Masks masks, Pixel::Format format)
+void Surface::Create(Point size, uint8 depth, Masks masks, Pixel::Format format)
 {
     Destroy();
-    surface=SDL_CreateRGBSurfaceWithFormat(0,width,height,depth, uint32(format));
+    surface=SDL_CreateRGBSurfaceWithFormat(0,size.x,size.y,depth, uint32(format));
 	Error::IfZero(surface);
 }
 void Surface::Blit(Surface& second, const Rect* source, const Rect* destination)

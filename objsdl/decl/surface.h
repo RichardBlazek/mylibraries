@@ -63,15 +63,15 @@ public:
 		init.surface=nullptr;
 		return *this;
 	}
-    Surface(int width, int height, uint8 depth, const Color* colors, size_t count=256);
-    Surface(int width, int height, uint8 depth, const Color* colors, size_t count, Pixel::Format format);
-    Surface(int width, int height, uint8 depth, Masks masks);
-    Surface(int width, int height, uint8 depth, Masks masks, Pixel::Format format);
+    Surface(Point size, uint8 depth, const Color* colors, size_t count=256);
+    Surface(Point size, uint8 depth, const Color* colors, size_t count, Pixel::Format format);
+    Surface(Point size, uint8 depth, Masks masks);
+    Surface(Point size, uint8 depth, Masks masks, Pixel::Format format);
 
-    void Create(int width, int height, uint8 depth, const Color* colors, size_t count=256);
-    void Create(int width, int height, uint8 depth, const Color* colors, size_t count, Pixel::Format format);
-	void Create(int width, int height, uint8 depth, Masks masks);
-	void Create(int width, int height, uint8 depth, Masks masks, Pixel::Format format);
+    void Create(Point size, uint8 depth, const Color* colors, size_t count=256);
+    void Create(Point size, uint8 depth, const Color* colors, size_t count, Pixel::Format format);
+	void Create(Point size, uint8 depth, Masks masks);
+	void Create(Point size, uint8 depth, Masks masks, Pixel::Format format);
 	static Surface LoadImg(const std::string& file)
 	{
 		Surface result(Error::IfZero(IMG_Load(file.c_str())));
