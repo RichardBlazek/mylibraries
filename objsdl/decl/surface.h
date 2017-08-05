@@ -11,7 +11,7 @@ enum class BlendMode
 class Surface
 {
 private:
-    SDL_Surface* surface;
+    SDL_Surface* surface=nullptr;
     static inline uint32 BE_ToNative(uint32 num)
 	{
 		return SDL_SwapBE32(num);
@@ -31,26 +31,25 @@ public:
 	{
 		if(surface)
 		{
-			--surface->refcount;
-			if(surface->refcount==0)
-				SDL_FreeSurface(surface);
+			SDL_FreeSurface(surface);
 			surface=nullptr;
 		}
 	}
-    Surface()noexcept:surface(nullptr){}
+    Surface()=default;
     ~Surface()noexcept
 	{
 		Destroy();
 	}
-    Surface(const Surface& init):surface(init.surface)
+    Surface(const Surface& init)
+		:Surface(Width(), Height(), BitsPerPixel(), GetMasks())
 	{
-		++surface->refcount;
+		std::copy((uint8*)init.surface->pixels, (uint8*)init.surface->pixels+BytesPerLine()*Height(), (uint8*)surface->pixels);
 	}
     Surface& operator=(const Surface& init)
 	{
 		Destroy();
-		surface=init.surface;
-		++surface->refcount;
+		Create(Width(), Height(), BitsPerPixel(), GetMasks());
+		std::copy((uint8*)init.surface->pixels, (uint8*)init.surface->pixels+BytesPerLine()*Height(), (uint8*)surface->pixels);
 		return *this;
 	}
 	Surface(Surface&& init)noexcept:surface(init.surface)
@@ -64,15 +63,15 @@ public:
 		init.surface=nullptr;
 		return *this;
 	}
-    Surface(int width, int height, int depth, const Color* colors, size_t count=256);
-    Surface(int width, int height, int depth, const Color* colors, size_t count, Pixel::Format format);
-    Surface(int width, int height, int depth, Masks masks);
-    Surface(int width, int height, int depth, Masks masks, Pixel::Format format);
-    Surface Clone();
-    void Create(int width, int height, int depth, const Color* colors, size_t count=256);
-    void Create(int width, int height, int depth, const Color* colors, size_t count, Pixel::Format format);
-	void Create(int width, int height, int depth, Masks masks);
-	void Create(int width, int height, int depth, Masks masks, Pixel::Format format);
+    Surface(int width, int height, uint8 depth, const Color* colors, size_t count=256);
+    Surface(int width, int height, uint8 depth, const Color* colors, size_t count, Pixel::Format format);
+    Surface(int width, int height, uint8 depth, Masks masks);
+    Surface(int width, int height, uint8 depth, Masks masks, Pixel::Format format);
+
+    void Create(int width, int height, uint8 depth, const Color* colors, size_t count=256);
+    void Create(int width, int height, uint8 depth, const Color* colors, size_t count, Pixel::Format format);
+	void Create(int width, int height, uint8 depth, Masks masks);
+	void Create(int width, int height, uint8 depth, Masks masks, Pixel::Format format);
 	static Surface LoadImg(const std::string& file)
 	{
 		Surface result(Error::IfZero(IMG_Load(file.c_str())));
