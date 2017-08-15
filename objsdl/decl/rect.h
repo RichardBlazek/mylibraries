@@ -1,7 +1,16 @@
 #pragma once
 
-struct Rect
+class Rect
 {
+private:
+    ///This function returns intersection of [this] and ['rectangle']
+    Rect SDL_IntersectWith(const Rect& rectangle)const noexcept
+	{
+		SDL_Rect r1=*this, r2=rectangle, r3;
+		SDL_IntersectRect(&r1, &r2, &r3);
+		return Rect(r3);
+	}
+public:
 	int x=0,y=0, w=0,h=0;
 	Rect()=default;
 	Rect(int x, int y, int w, int h)noexcept:x(x),y(y),w(w),h(h){}
@@ -115,17 +124,14 @@ struct Rect
 		return Content()<=rectangle.Content();
 	}
     ///If [this] and ['rectangle'] have intersection, this function returns [true]
-    bool HasIntersectionWith(const Rect& rectangle)const noexcept
+    bool Intersects(const Rect& rectangle)const noexcept
 	{
 		SDL_Rect r1=*this, r2=rectangle;
 		return SDL_HasIntersection(&r1, &r2);
 	}
-    ///This function returns intersection of [this] and ['rectangle']
-    Rect SDL_IntersectWith(const Rect& rectangle)const noexcept
+	bool Near(const Rect& rectangle)const noexcept
 	{
-		SDL_Rect r1=*this, r2=rectangle, r3;
-		SDL_IntersectRect(&r1, &r2, &r3);
-		return Rect(r3);
+		return SDL::Rect(x-1, y-1, w+2, h+2).Intersects(rectangle);
 	}
     ///This function returns intersection of [this] and ['rectangle']
     Rect IntersectWith(const Rect& rectangle)const noexcept
