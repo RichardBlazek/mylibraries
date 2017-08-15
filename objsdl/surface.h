@@ -1,12 +1,12 @@
 #pragma once
 
-Surface::Surface(Point size, uint8 depth, const Color* colors, size_t count)
+Surface::Surface(Point size, uint8 depth, const std::vector<Color>& colors)
 {
-	Create(size, depth, colors, count);
+	Create(size, depth, colors);
 }
-Surface::Surface(Point size, uint8 depth, const Color* colors, size_t count, Pixel::Format format)
+Surface::Surface(Point size, uint8 depth, const std::vector<Color>& colors, Pixel::Format format)
 {
-	Create(size, depth, colors, count, format);
+	Create(size, depth, colors, format);
 }
 Surface::Surface(Point size, uint8 depth, Masks masks)
 {
@@ -17,21 +17,19 @@ Surface::Surface(Point size, uint8 depth, Masks masks, Pixel::Format format)
 	Create(size, depth, masks, format);
 }
 
-void Surface::Create(Point size, uint8 depth, const Color* colors, size_t count)
+void Surface::Create(Point size, uint8 depth, const std::vector<Color>& colors)
 {
     Destroy();
     surface=SDL_CreateRGBSurface(0,size.x,size.y,depth, 0, 0, 0, 0);
 	Error::IfZero(surface);
-	if(colors)
-		SetPalette(colors, count);
+	SetPalette(colors);
 }
-void Surface::Create(Point size, uint8 depth, const Color* colors, size_t count, Pixel::Format format)
+void Surface::Create(Point size, uint8 depth, const std::vector<Color>& colors, Pixel::Format format)
 {
 	Destroy();
     surface=SDL_CreateRGBSurfaceWithFormat(0,size.x,size.y,depth, uint32(format));
 	Error::IfZero(surface);
-	if(colors)
-		SetPalette(colors, count);
+	SetPalette(colors);
 }
 void Surface::Create(Point size, uint8 depth, Masks masks)
 {

@@ -11,6 +11,11 @@ enum class BlendMode
 class Surface
 {
 private:
+	friend Window;
+	friend Texture;
+	friend Renderer;
+	friend Cursor;
+	friend Font;
     SDL_Surface* surface=nullptr;
     static inline uint32 BE_ToNative(uint32 num)
 	{
@@ -22,11 +27,7 @@ public:
 	{
 		uint32 r, g, b, a=0;
 	};
-	friend Window;
-	friend Texture;
-	friend Renderer;
-	friend Cursor;
-	friend Font;
+    Surface()=default;
     void Destroy()
 	{
 		if(surface)
@@ -35,21 +36,16 @@ public:
 			surface=nullptr;
 		}
 	}
-    Surface()=default;
     ~Surface()noexcept
 	{
 		Destroy();
 	}
     Surface(const Surface& init)
-		:Surface(init.Size(), init.BitsPerPixel(), init.GetMasks())
-	{
-		std::copy((uint8*)init.surface->pixels, (uint8*)init.surface->pixels+BytesPerLine()*Height(), (uint8*)surface->pixels);
-	}
+		:surface(Error::IfZero(SDL_ConvertSurface(init.surface, init.surface->format, 0))) {}
     Surface& operator=(const Surface& init)
 	{
 		Destroy();
-		Create(init.Size(), init.BitsPerPixel(), init.GetMasks());
-		std::copy((uint8*)init.surface->pixels, (uint8*)init.surface->pixels+BytesPerLine()*Height(), (uint8*)surface->pixels);
+		surface=Error::IfZero(SDL_ConvertSurface(init.surface, init.surface->format, 0));
 		return *this;
 	}
 	Surface(Surface&& init)noexcept:surface(init.surface)
@@ -63,13 +59,13 @@ public:
 		init.surface=nullptr;
 		return *this;
 	}
-    Surface(Point size, uint8 depth, const Color* colors, size_t count=256);
-    Surface(Point size, uint8 depth, const Color* colors, size_t count, Pixel::Format format);
+    Surface(Point size, uint8 depth, const std::vector<Color>& colors);
+    Surface(Point size, uint8 depth, const std::vector<Color>& colors, Pixel::Format format);
     Surface(Point size, uint8 depth, Masks masks);
     Surface(Point size, uint8 depth, Masks masks, Pixel::Format format);
 
-    void Create(Point size, uint8 depth, const Color* colors, size_t count=256);
-    void Create(Point size, uint8 depth, const Color* colors, size_t count, Pixel::Format format);
+    void Create(Point size, uint8 depth, const std::vector<Color>& colors);
+    void Create(Point size, uint8 depth, const std::vector<Color>& colors, Pixel::Format format);
 	void Create(Point size, uint8 depth, Masks masks);
 	void Create(Point size, uint8 depth, Masks masks, Pixel::Format format);
 	static Surface LoadImg(const std::string& file)
@@ -94,14 +90,13 @@ public:
 	{
 		return surface->format->BitsPerPixel;
 	}
-    void SetPalette(const Color* colors, uint32 count)
+    void SetPalette(const std::vector<Color>& colors)
 	{
 		if(surface->format->palette)
 		{
 			SDL_FreePalette(surface->format->palette);
 		}
-		surface->format->palette=SDL_AllocPalette(count);
-		Error::IfZero(surface->format->palette);
+		surface->format->palette=Error::IfZero(SDL_AllocPalette(colors.size()));
 		for(size_t i=0, limit=surface->format->palette->ncolors;i<limit;++i)
 		{
 			surface->format->palette->colors[i]=SDL_Color(colors[i]);

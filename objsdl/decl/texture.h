@@ -35,7 +35,7 @@ public:
 		Destroy();
 	}
     Texture(Texture&& src)noexcept
-			:texture(src.texture)
+		:texture(src.texture)
 	{
 		src.texture=nullptr;
 	}
@@ -51,7 +51,7 @@ public:
 		Error::IfZero(texture);
 	}
     Texture(Renderer& renderer, Surface surface)
-			:texture(SDL_CreateTextureFromSurface(renderer.renderer, surface.surface))
+		:texture(SDL_CreateTextureFromSurface(renderer.renderer, surface.surface))
 	{
 		Error::IfZero(texture);
 	}
@@ -66,13 +66,13 @@ public:
     Info GetInfo()const
 	{
 		Info result;
-		Error::IfNegative(SDL_QueryTexture(texture, (uint32*)(&result.format), (int*)(&result.access), &result.size.x, &result.size.y));
+		Error::IfNegative(SDL_QueryTexture(texture, (uint32*)&result.format, (int*)&result.access, &result.size.x, &result.size.y));
 		return result;
 	}
     void Update(const Surface& pixels, Point pos=Point())
 	{
 		SDL_Rect rectangle{pos.x, pos.y, int(pixels.Width()), int(pixels.Height())};
-		Error::IfNegative(SDL_UpdateTexture(texture, &rectangle,pixels.surface->pixels, pixels.BytesPerLine()));
+		Error::IfNegative(SDL_UpdateTexture(texture, &rectangle, pixels.surface->pixels, pixels.BytesPerLine()));
 	}
     static Texture LoadImg(const std::string& file, Renderer& rend)
 	{
@@ -82,11 +82,11 @@ public:
 	}
 	void SetRGBMod(const Color& mod)
 	{
-		Error::Condition(SDL_SetTextureColorMod(texture, mod.r, mod.g, mod.b)<0);
+		Error::IfNegative(SDL_SetTextureColorMod(texture, mod.r, mod.g, mod.b));
 	}
 	void SetAlphaMod(uint8 alpha)
 	{
-		Error::Condition(SDL_SetTextureAlphaMod(texture, alpha)<0);
+		Error::IfNegative(SDL_SetTextureAlphaMod(texture, alpha));
 	}
 	void SetRGBAMod(const Color& mod)
 	{
