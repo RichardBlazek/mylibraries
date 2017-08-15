@@ -20,18 +20,6 @@ void Swap(T& a, T& b)
     b=Move(tmp);
 }
 
-template<typename T1, typename T2>
-struct Pair
-{
-    T1 first;
-    T2 second;
-};
-template<typename T1, typename T2>inline
-Pair<T1,T2> MakePair(const T1& a1, const T2& a2)
-{
-	return Pair<T1,T2>({a1,a2});
-}
-
 template<typename T, size_t S>constexpr
 size_t ArraySize(T(&)[S])
 {
@@ -65,6 +53,12 @@ template<typename T, typename T2, typename... types>inline
 const T& Min(const T& arg1, const T2& arg2, const types&... args)
 {
     return Min(Min(arg1, arg2), args...);
+}
+
+template<typename T>
+T Limit(T x, T min, T max)
+{
+    return func::Min(func::Max(x, min), max);
 }
 template<typename T, typename T2>inline
 bool Ordered(const T& arg1, const T2& arg2)
