@@ -1,16 +1,25 @@
 #pragma once
 
-enum class SystemCursor
-{
-	Arrow,Ibeam,Wait,Crosshair,WaitArrow,SizeNWSE,
-	SizeNESW,SizeWE,SizeNS,SizeAll,No,Hand
-};
-
 class Cursor: public NonCopyable
 {
 private:
 	SDL_Cursor* cursor=nullptr;
 public:
+	enum class SystemIcon
+	{
+		Arrow=SDL_SYSTEM_CURSOR_ARROW,
+		Ibeam=SDL_SYSTEM_CURSOR_IBEAM,
+		Wait=SDL_SYSTEM_CURSOR_WAIT,
+		Crosshair=SDL_SYSTEM_CURSOR_CROSSHAIR,
+		WaitArrow=SDL_SYSTEM_CURSOR_WAITARROW,
+		SizeNWSE=SDL_SYSTEM_CURSOR_SIZENWSE,
+		SizeNESW=SDL_SYSTEM_CURSOR_SIZENESW,
+		SizeWE=SDL_SYSTEM_CURSOR_SIZEWE,
+		SizeNS=SDL_SYSTEM_CURSOR_SIZENS,
+		SizeAll=SDL_SYSTEM_CURSOR_SIZEALL,
+		No=SDL_SYSTEM_CURSOR_NO,
+		Hand=SDL_SYSTEM_CURSOR_HAND
+	};
 	Cursor()=default;
 	Cursor(Cursor&& init):cursor(init.cursor)
 	{
@@ -27,7 +36,7 @@ public:
 	{
 		Error::IfZero(cursor);
 	}
-	explicit Cursor(SystemCursor id)
+	explicit Cursor(SystemIcon id)
 		:cursor(SDL_CreateSystemCursor(SDL_SystemCursor(id)))
 	{
 		Error::IfZero(cursor);
@@ -44,6 +53,10 @@ public:
 			SDL_FreeCursor(cursor);
 			cursor=nullptr;
 		}
+	}
+	void Use()noexcept
+	{
+		SDL_SetCursor(cursor);
 	}
     //Schová kurzor
 	static void Hide()noexcept
