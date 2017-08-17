@@ -19,6 +19,9 @@ public:
 	Rect(Point xy, int w, int h)noexcept:Rect(xy.x, xy.y, w, h){}
 	Rect(int x, int y, Point wh)noexcept:Rect(x, y, wh.x, wh.y){}
 	Rect(Point xy, Point wh)noexcept:Rect(xy, wh.x, wh.y){}
+	//Square
+	Rect(int x, int y, int size)noexcept:Rect(x, y, size, size){}
+	Rect(Point xy, int size)noexcept:Rect(xy, size, size){}
     operator SDL_Rect()const noexcept
 	{
 		return SDL_Rect{x,y,w,h};
