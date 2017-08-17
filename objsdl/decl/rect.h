@@ -23,20 +23,20 @@ public:
 		return SDL_Rect{x,y,w,h};
 	}
     ///Functions for easy manipulation with Rectangle
-    bool EnclosesPoint(const Point& point)const noexcept
+    bool Encloses(const Point& point)const noexcept
 	{
 		return point.x>=x&&point.x<=x+w&&point.y>=y&&point.y<=y+h;
 	}
     ///Returns smallest Rectangle enclosing a set of points['points']
-    static Rect EnclosePoints(const Point* points, size_t count)noexcept
+    static Rect Enclose(const std::vector<Point>& points)noexcept
 	{
-		if(count==0)
+		if(points.empty())
 		{
 			return Rect();
 		}
 		Point min=points[0];
 		Point max=points[0];
-		for(size_t i=1;i<count;++i)
+		for(size_t i=1;i<points.size();++i)
 		{
 			min.x=func::Min(points[i].x, min.x);
 			min.y=func::Min(points[i].y, min.y);
@@ -146,7 +146,7 @@ public:
 		SDL_UnionRect(&r1, &r2, &r3);
 		return Rect(r3);
 	}
-    bool IntersectWithLine(Line& line)const noexcept
+    bool IntersectWith(Line& line)const noexcept
 	{
 		SDL_Rect rect=*this;
 		return SDL_IntersectRectAndLine(&rect, &line.begin.x, &line.begin.y, &line.end.x, &line.end.y);
