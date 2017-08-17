@@ -10,6 +10,8 @@ private:
 		SDL_IntersectRect(&r1, &r2, &r3);
 		return Rect(r3);
 	}
+	Rect(SDL_Rect rect)noexcept:Rect(rect.x, rect.y, rect.w, rect.h){}
+	friend Renderer;
 public:
 	int x=0,y=0, w=0,h=0;
 	Rect()=default;
@@ -17,7 +19,6 @@ public:
 	Rect(Point xy, int w, int h)noexcept:Rect(xy.x, xy.y, w, h){}
 	Rect(int x, int y, Point wh)noexcept:Rect(x, y, wh.x, wh.y){}
 	Rect(Point xy, Point wh)noexcept:Rect(xy, wh.x, wh.y){}
-	Rect(SDL_Rect rect)noexcept:Rect(rect.x, rect.y, rect.w, rect.h){}
     operator SDL_Rect()const noexcept
 	{
 		return SDL_Rect{x,y,w,h};
