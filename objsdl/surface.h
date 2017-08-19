@@ -61,7 +61,7 @@ void Surface::DisableColorKey(const Color& col)
 {
 	Error::Condition(SDL_SetColorKey(surface, false, SDL_MapRGBA(surface->format, col.r, col.g, col.b, col.a))<0);
 }
-void Surface::SetRGBMod(const Color::WithoutAlpha& col)
+void Surface::SetRGBMod(const ColorRGB& col)
 {
 	Error::Condition(SDL_SetSurfaceColorMod(surface, col.r, col.g, col.b)<0);
 }

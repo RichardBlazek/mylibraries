@@ -11,6 +11,7 @@
 
 #include "func.h"
 #include "geometry.h"
+#include "colors.h"
 #include "types.h"
 #include "nocopy.h"
 

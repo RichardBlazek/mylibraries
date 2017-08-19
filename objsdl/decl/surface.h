@@ -22,6 +22,14 @@ private:
 		return SDL_SwapBE32(num);
 	}
 	Surface(SDL_Surface* sdl):surface(sdl){}
+	static SDL_Color ColorSDL(const Color& col)
+	{
+		return SDL_Color{col.r, col.g, col.b, col.a};
+	}
+	static Color ColorSDL(const SDL_Color& col)
+	{
+		return Color(col.r, col.g, col.b, col.a);
+	}
 public:
 	struct Masks
 	{
@@ -99,7 +107,7 @@ public:
 		surface->format->palette=Error::IfZero(SDL_AllocPalette(colors.size()));
 		for(size_t i=0, limit=surface->format->palette->ncolors;i<limit;++i)
 		{
-			surface->format->palette->colors[i]=SDL_Color(colors[i]);
+			surface->format->palette->colors[i]=ColorSDL(colors[i]);
 		}
 	}
     Masks GetMasks()const
@@ -162,7 +170,7 @@ private:
 	}
 	Color IndexPalette(size_t i)const noexcept
 	{
-		return surface->format->palette->colors[i];
+		return ColorSDL(surface->format->palette->colors[i]);
 	}
 public:
 	size_t GetPaletteSize()const noexcept
@@ -221,7 +229,7 @@ public:
     void Draw(Surface&, const Rect*,const Rect*);
     void EnableColorKey(const Color& col);
     void DisableColorKey(const Color& col);
-    void SetRGBMod(const Color::WithoutAlpha& col);
+    void SetRGBMod(const ColorRGB& col);
     void SetAlphaMod(uint8 alpha);
     void SetRGBAMod(const Color& col);
     void SetBlendMode(BlendMode mode);

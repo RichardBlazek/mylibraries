@@ -71,63 +71,63 @@ public:
 	Surface Render(const std::string& text, Color textcolor)
 	{
 		ErrorIfNotOpened();
-		Surface result(TTF_RenderUTF8_Blended(font, text.empty()?" ":text.c_str(), textcolor));
+		Surface result(TTF_RenderUTF8_Blended(font, text.empty()?" ":text.c_str(), Surface::ColorSDL(textcolor)));
         Error::IfZero(result.surface);
         return result;
 	}
 	Surface Render(const std::u16string& text, Color textcolor)
 	{
 		ErrorIfNotOpened();
-		Surface result(TTF_RenderUNICODE_Blended(font, reinterpret_cast<const uint16*>(text.empty()?u" ":text.c_str()), textcolor));
+		Surface result(TTF_RenderUNICODE_Blended(font, reinterpret_cast<const uint16*>(text.empty()?u" ":text.c_str()), Surface::ColorSDL(textcolor)));
         Error::IfZero(result.surface);
         return result;
 	}
 	Surface Render(char16_t character, Color textcolor)
 	{
 		ErrorIfNotOpened();
-		Surface result(TTF_RenderGlyph_Blended(font, character, textcolor));
+		Surface result(TTF_RenderGlyph_Blended(font, character, Surface::ColorSDL(textcolor)));
         Error::IfZero(result.surface);
         return result;
 	}
 	Surface Render(const std::string& text, Color textcolor, Color backgroundcolor)
 	{
 		ErrorIfNotOpened();
-		Surface result(TTF_RenderUTF8_Shaded(font, text.empty()?" ":text.c_str(), textcolor, backgroundcolor));
+		Surface result(TTF_RenderUTF8_Shaded(font, text.empty()?" ":text.c_str(), Surface::ColorSDL(textcolor), Surface::ColorSDL(backgroundcolor)));
         Error::IfZero(result.surface);
         return result;
 	}
 	Surface Render(const std::u16string& text, Color textcolor, Color backgroundcolor)
 	{
 		ErrorIfNotOpened();
-		Surface result(TTF_RenderUNICODE_Shaded(font, reinterpret_cast<const uint16*>(text.empty()?u" ":text.c_str()), textcolor, backgroundcolor));
+		Surface result(TTF_RenderUNICODE_Shaded(font, reinterpret_cast<const uint16*>(text.empty()?u" ":text.c_str()), Surface::ColorSDL(textcolor), Surface::ColorSDL(backgroundcolor)));
         Error::IfZero(result.surface);
         return result;
 	}
 	Surface Render(char16_t character, Color textcolor, Color backgroundcolor)
 	{
 		ErrorIfNotOpened();
-		Surface result(TTF_RenderGlyph_Shaded(font, character, textcolor, backgroundcolor));
+		Surface result(TTF_RenderGlyph_Shaded(font, character, Surface::ColorSDL(textcolor), Surface::ColorSDL(backgroundcolor)));
         Error::IfZero(result.surface);
         return result;
 	}
 	Surface RenderFast(const std::string& text, Color textcolor)
 	{
 		ErrorIfNotOpened();
-		Surface result(TTF_RenderUTF8_Solid(font, text.empty()?" ":text.c_str(), textcolor));
+		Surface result(TTF_RenderUTF8_Solid(font, text.empty()?" ":text.c_str(), Surface::ColorSDL(textcolor)));
         Error::IfZero(result.surface);
         return result;
 	}
 	Surface RenderFast(const std::u16string& text, Color textcolor)
 	{
 		ErrorIfNotOpened();
-		Surface result(TTF_RenderUNICODE_Solid(font, reinterpret_cast<const uint16*>(text.empty()?u" ":text.c_str()), textcolor));
+		Surface result(TTF_RenderUNICODE_Solid(font, reinterpret_cast<const uint16*>(text.empty()?u" ":text.c_str()), Surface::ColorSDL(textcolor)));
         Error::IfZero(result.surface);
         return result;
 	}
 	Surface RenderFast(char16_t character, Color textcolor)
 	{
 		ErrorIfNotOpened();
-		Surface result(TTF_RenderGlyph_Solid(font, character, textcolor));
+		Surface result(TTF_RenderGlyph_Solid(font, character, Surface::ColorSDL(textcolor)));
         Error::IfZero(result.surface);
         return result;
 	}
