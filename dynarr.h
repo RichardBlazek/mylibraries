@@ -19,8 +19,8 @@ public:
 	using iterator=typ*;
 	using reverse_iterator=std::reverse_iterator<iterator>;
 
-	DynArr():alloc(new typ[0]) {}
-	explicit DynArr(size_t siz):alloc(new typ[siz]),len(siz),cap(siz) {}
+	DynArr(size_t siz=0)
+		:alloc(new typ[siz]), len(siz), cap(siz) {}
 	DynArr(const std::initializer_list<typ>& init):DynArr(init.size())
 	{
 		std::copy(init.begin(),init.end(), alloc);
@@ -42,7 +42,8 @@ public:
 	{
 		std::copy(init.begin(), init.end(), alloc);
 	}
-	DynArr(DynArr&& init)noexcept :alloc(init.alloc),len(init.len),cap(init.cap)
+	DynArr(DynArr&& init)noexcept
+		:alloc(init.alloc), len(init.len), cap(init.cap)
 	{
 		init.alloc=nullptr;
 		init.len=0;
@@ -67,12 +68,12 @@ public:
 		vct.cap=0;
 		return *this;
 	}
-	template<template<typename...> class Cont>
+	template<template<typename...> typename Cont>
 	DynArr(const Cont<typ>& init):DynArr(init.size())
 	{
 		std::copy(init.begin(), init.end(), begin());
 	}
-	template<template<typename...> class Cont>
+	template<template<typename...> typename Cont>
 	DynArr(Cont<typ>&& init):DynArr(init.size())
 	{
 		for(size_t i=0;i<len;++i)
@@ -182,12 +183,12 @@ public:
 	}
 	void push_back(const typ& value)
 	{
-		resize(len+1);
+		increase_size(1);
 		back()=value;
 	}
 	void push_back(typ&& value)
 	{
-		resize(len+1);
+		increase_size(1);
 		back()=func::Move(value);
 	}
 	void pop_back()
@@ -198,24 +199,26 @@ public:
 	}
 	void erase(size_t index)
 	{
-		if(index==len-1)
+		for(size_t i=index+1; i<len; ++i)
 		{
-			pop_back();
-			return;
+			alloc[i-1]=func::Move(alloc[i]);
 		}
-		typ last=func::Move(back());
 		pop_back();
-		for(size_t i=index; i<len-1; ++i)
+	}
+	void insert(size_t index, const typ& value)
+	{
+        increase_size(1);
+        for(size_t i=index+1; i<len; ++i)
 		{
-			alloc[i]=func::Move(alloc[i+1]);
+			alloc[i]=func::Move(alloc[i-1]);
 		}
-		back()=func::Move(last);
+		alloc[index]=value;
 	}
 	void reverse()noexcept
 	{
 		for(size_t i=0; i<(len>>1); ++i)
 		{
-			Swap(alloc[i],alloc[len-(i+1)]);
+			Swap(alloc[i], alloc[len-i-1]);
 		}
 		return *this;
 	}
