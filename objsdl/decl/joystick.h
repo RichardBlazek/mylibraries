@@ -3,7 +3,7 @@
 class Joystick: public NonCopyable
 {
 private:
-    SDL_Joystick* joystick;
+    SDL_Joystick* joystick=nullptr;
 public:
 	using GUID=SDL_JoystickGUID;
     enum class HatState: uint8
@@ -28,7 +28,7 @@ public:
 		Wired=SDL_JOYSTICK_POWER_WIRED,
 		Max=SDL_JOYSTICK_POWER_MAX,
 	};
-    Joystick();
+    Joystick()=default;
     Joystick(Joystick&& joy);
     Joystick& operator=(Joystick&& joy);
     bool IsOpened()

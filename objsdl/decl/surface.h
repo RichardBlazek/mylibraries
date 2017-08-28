@@ -70,12 +70,12 @@ public:
     Surface(Point size, uint8 depth, const std::vector<Color>& colors);
     Surface(Point size, uint8 depth, const std::vector<Color>& colors, Pixel::Format format);
     Surface(Point size, uint8 depth, Masks masks);
-    Surface(Point size, uint8 depth, Masks masks, Pixel::Format format);
+    Surface(Point size, uint8 depth, Pixel::Format format);
 
     void Create(Point size, uint8 depth, const std::vector<Color>& colors);
     void Create(Point size, uint8 depth, const std::vector<Color>& colors, Pixel::Format format);
 	void Create(Point size, uint8 depth, Masks masks);
-	void Create(Point size, uint8 depth, Masks masks, Pixel::Format format);
+	void Create(Point size, uint8 depth, Pixel::Format format);
 	static Surface LoadImg(const std::string& file)
 	{
 		Surface result(Error::IfZero(IMG_Load(file.c_str())));

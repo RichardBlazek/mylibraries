@@ -12,9 +12,9 @@ Surface::Surface(Point size, uint8 depth, Masks masks)
 {
 	Create(size, depth, masks);
 }
-Surface::Surface(Point size, uint8 depth, Masks masks, Pixel::Format format)
+Surface::Surface(Point size, uint8 depth, Pixel::Format format)
 {
-	Create(size, depth, masks, format);
+	Create(size, depth, format);
 }
 
 void Surface::Create(Point size, uint8 depth, const std::vector<Color>& colors)
@@ -37,7 +37,7 @@ void Surface::Create(Point size, uint8 depth, Masks masks)
     surface=SDL_CreateRGBSurface(0,size.x,size.y,depth, BE_ToNative(masks.r), BE_ToNative(masks.g), BE_ToNative(masks.b), BE_ToNative(masks.a));
 	Error::IfZero(surface);
 }
-void Surface::Create(Point size, uint8 depth, Masks masks, Pixel::Format format)
+void Surface::Create(Point size, uint8 depth, Pixel::Format format)
 {
     Destroy();
     surface=SDL_CreateRGBSurfaceWithFormat(0,size.x,size.y,depth, uint32(format));

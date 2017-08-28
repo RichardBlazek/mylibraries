@@ -18,8 +18,8 @@ public:
 		data.format=SDL_AudioFormat(fmt);
 		data.channels=channels;
 		data.samples=samples;
-		data.callback=nullptr;
-		data.userdata=nullptr;
+		data.callback=callback;
+		data.userdata=userdata;
 	}
 	//Přístup k atributům
 	void SetFrequency(int frequency)noexcept

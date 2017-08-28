@@ -1,6 +1,6 @@
 #pragma once
 
-class GameController
+class GameController: public NonCopyable
 {
 private:
 	SDL_GameController* gcon=nullptr;

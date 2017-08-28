@@ -1,6 +1,5 @@
 #pragma once
 
-Joystick::Joystick():joystick(nullptr){}
 Joystick::Joystick(Joystick&& joy):joystick(joy.joystick)
 {
 	joy.joystick=nullptr;
@@ -26,10 +25,7 @@ void Joystick::Open(int device_index)
 	Error::Condition(!joystick);
 }
 Joystick::Joystick(int device_index)
-{
-    joystick=SDL_JoystickOpen(device_index);
-	Error::Condition(!joystick);
-}
+	:joystick(Error::IfZero(SDL_JoystickOpen(device_index))) {}
 Joystick::~Joystick()
 {
 	Close();

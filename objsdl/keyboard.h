@@ -7,9 +7,7 @@ private:
 	int size;
 public:
 	KeyboardState()noexcept
-	{
-		keys=SDL_GetKeyboardState(&size);
-	}
+		:keys(SDL_GetKeyboardState(&size)) {}
 	bool IsPressed(Scancode value)const
 	{
 		if(int(value)>size)
@@ -45,9 +43,7 @@ private:
 	Keymod mod_state;
 public:
 	KeymodState()noexcept
-	{
-		mod_state=Keymod(SDL_GetModState());
-	}
+		:mod_state(Keymod(SDL_GetModState())) {}
 	void Refresh()noexcept
 	{
 		mod_state=Keymod(SDL_GetModState());
