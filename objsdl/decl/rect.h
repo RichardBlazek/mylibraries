@@ -155,4 +155,8 @@ public:
 		SDL_Rect rect=*this;
 		return SDL_IntersectRectAndLine(&rect, &line.begin.x, &line.begin.y, &line.end.x, &line.end.y);
 	}
+	Rect Shift(Point shift)const
+	{
+		return Rect(Position()+shift, Size());
+	}
 };

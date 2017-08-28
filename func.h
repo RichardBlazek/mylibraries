@@ -78,15 +78,15 @@ auto Sum(const T& arg1, const T2& arg2)
 }
 
 template<typename T, typename... Types>inline
-T Sum(const T& arg1, const Types&... args)
+auto Sum(const T& arg1, const Types&... args)
 {
-    return arg1+Sum(args...);
+    return arg1+Sum<Types...>(args...);
 }
 
 template<typename... T>inline
 auto Avg(const T&... arg)
 {
-    return Sum(arg...)/sizeof...(arg);
+    return Sum<T...>(arg...)/sizeof...(arg);
 }
 
 
