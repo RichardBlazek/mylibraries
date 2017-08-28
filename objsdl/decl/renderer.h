@@ -35,16 +35,13 @@ public:
 		int32 MaxTextureWidth, MaxTextureHeight;
 		Info()=default;
 		Info(const std::string& name, Type flags, Pixel::Format* textureformats, uint32 num_textureformats, int32 max_texturewidth, int32 max_textureheight)
+			:Name(name), Flags(flags), NumberOfTextureFormats(num_textureformats),
+				MaxTextureWidth(max_texturewidth), MaxTextureHeight(max_textureheight)
 		{
-			Name=name;
-			Flags=flags;
-			NumberOfTextureFormats=num_textureformats;
 			for(uint32 i=0;i<num_textureformats;++i)
 			{
                 TextureFormats[i]=Pixel::Format(textureformats[i]);
 			}
-			MaxTextureWidth=max_texturewidth;
-			MaxTextureHeight=max_textureheight;
 		}
 	};
 	friend Texture;
@@ -218,15 +215,15 @@ public:
 	}
 	void Draw(Font& font, const std::string& u8text, const Color& textcolor, Rect dst, const Color& backgroundcolor)
 	{
-		Draw(font, u8text, textcolor, dst.Center()-font.TextSize(u8text)/2);
+		Draw(font, u8text, textcolor, dst.Center()-font.TextSize(u8text)/2, backgroundcolor);
 	}
 	void Draw(Font& font, const std::u16string& u16text, const Color& textcolor, Rect dst, const Color& backgroundcolor)
 	{
-		Draw(font, u16text, textcolor, dst.Center()-font.TextSize(u16text)/2);
+		Draw(font, u16text, textcolor, dst.Center()-font.TextSize(u16text)/2, backgroundcolor);
 	}
 	void Draw(Font& font, char16_t character, const Color& textcolor, Rect dst, const Color& backgroundcolor)
 	{
-		Draw(font, character, textcolor, dst.Center()-font.TextSize(character)/2);
+		Draw(font, character, textcolor, dst.Center()-font.TextSize(character)/2, backgroundcolor);
 	}
 	void DrawFast(Font& font, const std::string& u8text, const Color& textcolor, Rect dst)
 	{
