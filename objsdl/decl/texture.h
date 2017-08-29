@@ -17,12 +17,6 @@ public:
 		Color=SDL_TEXTUREMODULATE_COLOR,
 		Alpha=SDL_TEXTUREMODULATE_ALPHA
 	};
-	struct Info
-	{
-		Pixel::Format format;
-		Access access;
-		Point size;
-	};
 	struct LockedData
 	{
         void* Pixels;
@@ -63,10 +57,22 @@ public:
 			texture=nullptr;
 		}
 	}
-    Info GetInfo()const
+	Point Size()const
 	{
-		Info result;
-		Error::IfNegative(SDL_QueryTexture(texture, (uint32*)&result.format, (int*)&result.access, &result.size.x, &result.size.y));
+		Point result;
+		Error::IfNegative(SDL_QueryTexture(texture, nullptr, nullptr, &result.x, &result.y));
+		return result;
+	}
+	Access GetAccess()const
+	{
+		Access result;
+		Error::IfNegative(SDL_QueryTexture(texture, nullptr, (int*)&result, nullptr, nullptr));
+		return result;
+	}
+    Pixel::Format GetPixelFormat()const
+	{
+		Pixel::Format result;
+		Error::IfNegative(SDL_QueryTexture(texture, (uint32*)&result, nullptr, nullptr, nullptr));
 		return result;
 	}
     void Update(const Surface& pixels, Point pos=Point())
