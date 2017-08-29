@@ -163,4 +163,12 @@ public:
 	{
 		return Rect(Position()-shift, Size());
 	}
+	Rect& operator+=(Point shift)
+	{
+		return *this=*this+shift;
+	}
+	Rect& operator-=(Point shift)
+	{
+		return *this=*this-shift;
+	}
 };
