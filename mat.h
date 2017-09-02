@@ -23,9 +23,15 @@ number RoundDown(number value, number unit)
 {
     return integral(value/unit)*unit;
 }
-int64 Round(double x)noexcept
+template<typename Float>
+int64 Round(Float x)noexcept
 {
 	return int64(x)+(x-int64(x)>=0.5);
+}
+template<typename Float>
+int64 RoundUp(Float x)noexcept
+{
+	return int64(x)+(x-int64(x)>0.0);
 }
 double Power(double x, int32 exp=2)noexcept
 {
@@ -158,5 +164,11 @@ uint32 GCD(uint32 a,uint32 b)noexcept
 uint32 LCM(uint32 a, uint32 b)noexcept
 {
 	return a*b/GCD(a,b);
+}
+
+template<typename T>
+T ArithmeticProgression(T first, T lenght, T step=T(1))
+{
+	return lenght*(2*first+step*(lenght-1))/2;
 }
 }
