@@ -39,11 +39,13 @@ public:
 	{
 		Close();
         font=TTF_OpenFont(filename.c_str(), size);
+        Error::IfZero(font);
 	}
 	void Open(const std::string& filename, uint32 size, uint32 index)
 	{
         Close();
         font=TTF_OpenFontIndex(filename.c_str(), size, index);
+        Error::IfZero(font);
 	}
 	bool IsOpened()const
 	{
