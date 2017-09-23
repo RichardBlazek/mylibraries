@@ -6,41 +6,38 @@
 #include "types.h"
 #include <cstdlib>
 
-class console
+namespace console
 {
-private:
-	static uint8 BGcol, FGcol;
-public:
-	console()=delete;
-    static inline void SetColor(uint8 background, uint8 foreground)noexcept
+    inline void SetColor(uint8 background, uint8 foreground)noexcept
     {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (BGcol=background)*16+ (FGcol=foreground));
     }
-    static inline void SetBGcol(uint8 background)noexcept
-    {
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (BGcol=background)*16+FGcol);
-    }
-    static inline void SetFGcol(uint8 foreground)noexcept
-    {
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BGcol*16+ (FGcol=foreground));
-    }
-    static inline void Clear()noexcept
+    inline void Clear()noexcept
     {
         system("cls");
     }
-    static inline void SetTitle(std::string txt)noexcept
+    inline void SetTitle(std::string txt)noexcept
 	{
 		SetConsoleTitleA(txt.c_str());
 	}
-	static inline void SetTitle(std::wstring txt)noexcept
+	inline void SetTitle(std::wstring txt)noexcept
 	{
 		SetConsoleTitleW(txt.c_str());
 	}
-};
-uint8 console::BGcol=0, console::FGcol=7;
-inline void Wait(uint32 ms)noexcept
-{
-	Sleep(ms);
+	inline void Hide()noexcept
+	{
+		HWND wind;
+		AllocConsole();
+		wind=FindWindowA("ConsoleWindowclass", nullptr);
+		ShowWindow(wind, 0);
+	}
+	inline void Show()noexcept
+	{
+		HWND wind;
+		AllocConsole();
+		wind=FindWindowA("ConsoleWindowclass", nullptr);
+		ShowWindow(wind, 1);
+	}
 }
 
 namespace cursor
