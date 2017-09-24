@@ -10,7 +10,7 @@ namespace console
 {
     inline void SetColor(uint8 background, uint8 foreground)noexcept
     {
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (BGcol=background)*16+ (FGcol=foreground));
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (background<<4)+foreground);
     }
     inline void Clear()noexcept
     {
