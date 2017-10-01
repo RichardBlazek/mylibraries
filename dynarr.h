@@ -214,6 +214,18 @@ public:
 		}
 		alloc[index]=value;
 	}
+	template<typename FunType>
+	void filter(FunType remove)
+	{
+		for(size_t i=0; i<len; ++i)
+		{
+			if(remove(alloc[i]))
+			{
+				erase(i);
+				--i;
+			}
+		}
+	}
 	void reverse()noexcept
 	{
 		for(size_t i=0; i<(len>>1); ++i)
