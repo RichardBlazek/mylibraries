@@ -1,6 +1,7 @@
 #pragma once
 
 #include <initializer_list>
+#include <vector>
 #include <iterator>
 #include <exception>
 #include "types.h"
