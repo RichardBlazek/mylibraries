@@ -1,11 +1,17 @@
 #pragma once
 
+#include <stdexcept>
+
 template<typename T>
 class Optional
 {
 private:
 	T* value=nullptr;
 public:
+	struct EmptyError: std::logic_error
+	{
+		using std::logic_error::logic_error;
+	};
     Optional()=default;
     Optional(const Optional& opt)
 		:value(opt.HasValue()?new T(*opt.value):nullptr){}
@@ -44,7 +50,7 @@ public:
     }
     T& GetValue()const
     {
-    	if(!value)throw "Optional error";
+    	if(!value)throw EmptyError("Optional error");
     	return *value;
     }
     explicit operator bool()const
