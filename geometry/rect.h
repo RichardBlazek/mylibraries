@@ -42,7 +42,7 @@ namespace geometry
 		template<typename pos_typ>
 		bool Encloses(const Point<pos_typ>& point)const noexcept
 		{
-			return point.x>=x&&point.x<=x+w&&point.y>=y&&point.y<=y+h;
+			return point.x>=x&&point.x<=pos_typ(x+w)&&point.y>=y&&point.y<=pos_typ(y+h);
 		}
 		///Returns smallest Rectangle enclosing a set of points['points']
 		template<typename pos_typ>

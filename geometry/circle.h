@@ -1,6 +1,6 @@
 #pragma once
 
-#include "geometry/base.h"
+#include "base.h"
 
 namespace geometry
 {
