@@ -63,7 +63,7 @@ namespace colors
 			{
 				h=double(rgb.g-rgb.b)/(max-min)*256/6+256;
 			}
-			else if(max==g)
+			else if(max==rgb.g)
 			{
 				h=double(rgb.b-rgb.r)/(max-min)*256/6+256/3.0;
 			}
