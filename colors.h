@@ -25,38 +25,6 @@ namespace colors
 		{
 			return RGB(r-second.r, g-second.g, b-second.b);
 		}
-		static constexpr RGB White()
-		{
-			return RGB(255,255,255);
-		}
-		static constexpr RGB Black()
-		{
-			return RGB(0,0,0);
-		}
-		static constexpr RGB Red()
-		{
-			return RGB(255,0,0);
-		}
-		static constexpr RGB Green()
-		{
-			return RGB(0,255,0);
-		}
-		static constexpr RGB Blue()
-		{
-			return RGB(0,0,255);
-		}
-		static constexpr RGB Yellow()
-		{
-			return RGB(255,255,0);
-		}
-		static constexpr RGB Cyan()
-		{
-			return RGB(0,255,255);
-		}
-		static constexpr RGB Magenta()
-		{
-			return RGB(255,0,255);
-		}
     };
     struct RGBA: public RGB
     {
