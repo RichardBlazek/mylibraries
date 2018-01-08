@@ -43,11 +43,13 @@ namespace geometry
 			{
 				return Cartesian(x/second.x, y/second.y);
 			}
-			constexpr Cartesian operator*(typ second)const noexcept
+			template<typename T>
+			constexpr Cartesian operator*(T second)const noexcept
 			{
 				return Cartesian(x*second, y*second);
 			}
-			constexpr Cartesian operator/(typ second)const noexcept
+			template<typename T>
+			constexpr Cartesian operator/(T second)const noexcept
 			{
 				return Cartesian(x/second, y/second);
 			}
@@ -68,11 +70,13 @@ namespace geometry
 			{
 				return *this=*this/second;
 			}
-			constexpr Cartesian operator*=(typ second)noexcept
+			template<typename T>
+			constexpr Cartesian operator*=(T second)noexcept
 			{
 				return *this=*this*second;
 			}
-			constexpr Cartesian operator/=(typ second)noexcept
+			template<typename T>
+			constexpr Cartesian operator/=(T second)noexcept
 			{
 				return *this=*this/second;
 			}
