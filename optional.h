@@ -44,14 +44,14 @@ public:
     	value=new T(newvalue);
     	return *this;
     }
-    bool HasValue()const
-    {
-    	return value;
-    }
-    T& GetValue()const
+    T& Value()const
     {
     	if(!value)throw EmptyError("Optional error");
     	return *value;
+    }
+    T ValueOr(T a)const
+    {
+    	return value?*value:a;
     }
     explicit operator bool()const
     {

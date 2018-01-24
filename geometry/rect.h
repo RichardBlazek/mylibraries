@@ -141,7 +141,7 @@ namespace geometry
 		///If [this] and ['second'] have intersection, this function returns [true]
 		bool Intersects(const Rect& second)const noexcept
 		{
-			return (x<=second.x?Right():second.Right())<func::Max(x, second.x)||(y<=second.y?Down():second.Down())<func::Max(y, second.y);
+			return bool(IntersectWith(second));
 		}
 		bool Near(const Rect& second)const noexcept
 		{
@@ -150,8 +150,8 @@ namespace geometry
 		///This function returns intersection of [this] and ['second']
 		Optional<Rect> IntersectWith(const Rect& second)const noexcept
 		{
-			pos_type left=func::Max(x, second.x), right=(x<=second.x?Right():second.Right());
-			pos_type up=func::Max(y, second.y), down=(y<=second.y?Down():second.Down());
+			pos_type left=func::Max(x, second.x), right=func::Min(Right(), second.Right());
+			pos_type up=func::Max(y, second.y), down=func::Min(Down(), second.Down());
 			return (right<left||down<up)?Optional<Rect>():Optional<Rect>(Rect(left, up, right-left, down-up));
 		}
 		///This function returns union of [this] and ['second']
@@ -161,63 +161,6 @@ namespace geometry
 			pos_type up=func::Min(y, second.y), down=func::Max(Down(), second.Down());
 			return Rect(left, up, right-up, down-up);
 		}
-		/*template<typename Real>
-		Optional<Line<pos_type, Real>> IntersectWith(const Line<pos_type, Real>& line)const noexcept
-		{
-			Line result=line;
-			//TATO CAST JE HOTOVA
-			if(result.begin.x<x)
-			{
-				const Real fraction=Real(x-result.begin.x)/result.Difference().x;
-				result.begin.y=result.end.y-fraction*result.Difference().y;
-				result.begin.x=x;
-			}
-			else if(result.begin.x>x+w)
-			{
-				const Real fraction=Real(result.begin.x-x-w)/result.Difference().x;
-				result.begin.y=result.begin.y-fraction*result.Difference().y;
-				result.begin.x=x+w;
-			}
-			if(result.begin.y<y)
-			{
-				const Real fraction=Real(y-result.begin.y)/result.Difference().y;
-				result.begin.x=result.end.x-fraction*result.Difference().x;
-				result.begin.y=y;
-			}
-			else if(result.begin.y>y+h)
-			{
-				const Real fraction=Real(result.begin.y-y-h)/result.Difference().y;
-				result.begin.x=result.begin.x-fraction*result.Difference().x;
-				result.begin.y=y+h;
-			}
-
-			//TATO CAST NENI HOTOVA
-			if(result.end.x<x)
-			{
-				const Real fraction=Real(x-result.end.x)/result.Difference().x;
-				result.end.y=result.end.y-fraction*result.Difference().y;
-				result.end.x=x;
-			}
-			else if(result.begin.x>x+w)
-			{
-				const Real fraction=Real(result.begin.x-x-w)/result.Difference().x;
-				result.begin.y=result.begin.y-fraction*result.Difference().y;
-				result.begin.x=x+w;
-			}
-			if(result.begin.y<y)
-			{
-				const Real fraction=Real(y-result.begin.y)/result.Difference().y;
-				result.begin.x=result.end.x-fraction*result.Difference().x;
-				result.begin.y=y;
-			}
-			else if(result.begin.y>y+h)
-			{
-				const Real fraction=Real(result.begin.y-y-h)/result.Difference().y;
-				result.begin.x=result.begin.x-fraction*result.Difference().x;
-				result.begin.y=y+h;
-			}
-			return result;
-		}*/
 		Rect operator+(XY shift)const
 		{
 			return Rect(Position()+shift, Size());
