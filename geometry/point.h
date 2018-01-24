@@ -27,6 +27,14 @@ namespace geometry
 			{
 				return x!=second.x||y!=second.y;
 			}
+			constexpr Cartesian operator-()const noexcept
+			{
+				return Cartesian(-x, -y);
+			}
+			constexpr Cartesian operator~()const noexcept
+			{
+				return Cartesian(y, x);
+			}
 			constexpr Cartesian operator-(const Cartesian& second)const noexcept
 			{
 				return Cartesian(x-second.x, y-second.y);
@@ -110,6 +118,10 @@ namespace geometry
 				return lenght!=second.lenght||angle!=second.angle;
 			}
 			//Zmeny
+			constexpr Polar operator-()const noexcept
+			{
+				return Polar(lenght, angle+pi);
+			}
 			constexpr Polar operator*(length_typ second)const noexcept
 			{
 				return Polar(lenght*second, angle);
