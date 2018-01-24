@@ -120,7 +120,7 @@ namespace geometry
 			//Zmeny
 			constexpr Polar operator-()const noexcept
 			{
-				return Polar(lenght, angle+pi);
+				return Polar(lenght, angle+pi<Real>);
 			}
 			constexpr Polar operator*(length_typ second)const noexcept
 			{
