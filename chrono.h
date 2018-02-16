@@ -34,6 +34,6 @@ public:
 	void NextLoop(std::chrono::duration<Rep, Period> loop_time)
 	{
 		std::this_thread::sleep_until(time.StartTime()+loop_time);
-		time.Reset()
+		time.Reset();
 	}
 };
