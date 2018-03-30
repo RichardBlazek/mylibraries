@@ -21,22 +21,20 @@ namespace geometry
 		Rect()=default;
 		Rect(pos_type x, pos_type y, size_type w, size_type h)noexcept
 			:x(x), y(y), w(w), h(h){}
-		template<typename pos_typ> Rect(Point<pos_typ> xy, size_type w, size_type h)noexcept
-			:Rect(xy.x, xy.y, w, h){}
-		template<typename size_typ> Rect(pos_type x, pos_type y, Point<size_typ> wh)noexcept
-			:Rect(x, y, wh.x, wh.y){}
-		template<typename pos_typ, typename size_typ> Rect(Point<pos_typ> xy, Point<size_typ> wh)noexcept
-			:Rect(xy, wh.x, wh.y){}
+		template<typename pos_typ>
+		Rect(Point<pos_typ> xy, size_type w, size_type h)noexcept :Rect(xy.x, xy.y, w, h){}
+		template<typename size_typ>
+		Rect(pos_type x, pos_type y, Point<size_typ> wh)noexcept :Rect(x, y, wh.x, wh.y){}
+		template<typename pos_typ, typename size_typ>
+		Rect(Point<pos_typ> xy, Point<size_typ> wh)noexcept :Rect(xy, wh.x, wh.y){}
 		//Square
-		Rect(pos_type x, pos_type y, size_type size)noexcept
-			:Rect(x, y, size, size){}
-		template<typename pos_typ> Rect(Point<pos_typ> xy, size_type size)noexcept
-			:Rect(xy, size, size){}
+		Rect(pos_type x, pos_type y, size_type size)noexcept :Rect(x, y, size, size){}
+		template<typename pos_typ>
+		Rect(Point<pos_typ> xy, size_type size)noexcept :Rect(xy, size, size){}
 		//Only size
-		Rect(size_type w, size_type h)noexcept
-			:Rect(0, 0, w, h){}
-		template<typename size_typ> Rect(Point<size_typ> wh)noexcept
-			:Rect(0, 0, wh){}
+		Rect(size_type w, size_type h)noexcept :Rect(0, 0, w, h){}
+		template<typename size_typ>
+		Rect(Point<size_typ> wh)noexcept :Rect(0, 0, wh){}
 
 		///Functions for easy manipulation with Rectangle
 		template<typename pos_typ>
@@ -148,15 +146,23 @@ namespace geometry
 			return Rect(x-1, y-1, w+2, h+2).Intersects(second);
 		}
 		///This function returns intersection of [this] and ['second']
-		Optional<Rect> IntersectWith(const Rect& second)const noexcept
+		Optional<Rect> operator*(const Rect& second)const noexcept
 		{
+			if(IsEmpty())
+			{
+				return Rect();
+			}
 			pos_type left=func::Max(x, second.x), right=func::Min(Right(), second.Right());
 			pos_type up=func::Max(y, second.y), down=func::Min(Down(), second.Down());
 			return (right<left||down<up)?Optional<Rect>():Optional<Rect>(Rect(left, up, right-left, down-up));
 		}
 		///This function returns union of [this] and ['second']
-		Rect UnionWith(const Rect& second)const noexcept
+		Rect operator+(const Rect& second)const noexcept
 		{
+			if(IsEmpty())
+			{
+				return second;
+			}
 			pos_type left=func::Min(x, second.x), right=func::Max(Right(), second.Right());
 			pos_type up=func::Min(y, second.y), down=func::Max(Down(), second.Down());
 			return Rect(left, up, right-up, down-up);
