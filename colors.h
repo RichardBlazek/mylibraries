@@ -65,14 +65,14 @@ namespace colors
 			}
 			else if(max==rgb.g)
 			{
-				h=double(rgb.b-rgb.r)/(max-min)*256/6+256/3.0;
+				h=double(rgb.b-rgb.r)/(max-min)*256/6+256.0/3;
 			}
 			else
 			{
-				h=double(rgb.r-rgb.g)/(max-min)*256/6+512/3.0;
+				h=double(rgb.r-rgb.g)/(max-min)*256/6+512.0/3;
 			}
 			l=(max+min)/2;
-			s=(l==0?0:l<128?(max-min)/2*l:(max-min)/(512-2*l));
+			s=(l==0?0:l<=128?(max-min)*l/2:128*(max-min)/(256-l));
         }
 		constexpr bool operator==(const HSL& second)const
 		{

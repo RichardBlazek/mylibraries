@@ -40,7 +40,7 @@ namespace geometry
 		template<typename pos_typ>
 		bool Encloses(const Point<pos_typ>& point)const noexcept
 		{
-			return point.x>=x&&point.x<=pos_typ(x+w)&&point.y>=y&&point.y<=pos_typ(y+h);
+			return point.x>=x&&point.x<Right()&&point.y>=y&&point.y<Down();
 		}
 		///Returns smallest Rectangle enclosing a set of points['points']
 		template<typename pos_typ>
@@ -77,19 +77,19 @@ namespace geometry
 		}
 		XY LeftUp()const noexcept
 		{
-			return XY(x, y);
+			return XY(Left(), Up());
 		}
 		XY RightUp()const noexcept
 		{
-			return XY(x+w, y);
+			return XY(Right(), Up());
 		}
 		XY LeftDown()const noexcept
 		{
-			return XY(x, y+h);
+			return XY(Left(), Down());
 		}
 		XY RightDown()const noexcept
 		{
-			return XY(x+w, y+h);
+			return XY(Right(), Down());
 		}
 		pos_type Left()const noexcept
 		{
@@ -136,10 +136,9 @@ namespace geometry
 		{
 			return Content()<=second.Content();
 		}
-		///If [this] and ['second'] have intersection, this function returns [true]
 		bool Intersects(const Rect& second)const noexcept
 		{
-			return bool(IntersectWith(second));
+			return bool((*this)*second);
 		}
 		bool Near(const Rect& second)const noexcept
 		{
