@@ -21,5 +21,9 @@ namespace geometry
 		{
 			return 2*pi*radius;
 		}
+		constexpr bool Encloses(point_typ point)
+		{
+            return sqrt((point.x-center.x)*(point.x-center.x)+(point.y-center.y)*(point.y-center.y))<radius;
+		}
 	};
 }
