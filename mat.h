@@ -5,161 +5,55 @@
 namespace math
 {
 constexpr double pi=3.141592653589793;
-double DegToRad(double deg)noexcept
+
+template<typename Float>
+constexpr Float DegToRad(Float deg)noexcept
 {
 	return deg*pi/180;
 }
-double RadToDeg(double rad)noexcept
+template<typename Float>
+constexpr Float RadToDeg(Float rad)noexcept
 {
 	return rad*180/pi;
 }
-template<typename T>
-T Abs(T val)noexcept
+template<typename Num>
+constexpr Num Abs(Num val)noexcept
 {
 	return (val>0)?val:-val;
 }
-template<typename number, typename integral>
-number RoundDown(number value, number unit)
+
+template<typename Num, typename Int>
+constexpr Num RoundDown(Num value, Num unit)
 {
-    return integral(value/unit)*unit;
+    return Int(value/unit)*unit;
 }
-template<typename Float>
-int64 Round(Float x)noexcept
+template<typename Num, typename Int>
+constexpr Num RoundUp(Num value, Num unit)noexcept
 {
-	return int64(x)+(x-int64(x)>=0.5);
+	return Int(value/unit)*unit+(value/unit>Num(Int(value/unit)));
 }
-template<typename Float>
-int64 RoundUp(Float x)noexcept
+template<typename Num, typename Int>
+constexpr Int Round(Num x)noexcept
 {
-	return int64(x)+(x-int64(x)>0.0);
+	return Int(x)+(x-Int(x)>=0.5);
 }
-double Power(double x, int32 exp=2)noexcept
+
+template<typename Num, typename Int>
+constexpr Num Modulo(Num x, Num div)
 {
-	if(exp<0)
-	{
-		return 1/Power(x, -exp);
-	}
-	else if(exp==0)
-	{
-		return 1;
-	}
-	double y=x;
-	for(int32 i=1; i<exp; ++i)
-	{
-		x*=y;
-	}
-	return x;
+	return (x/div-Int(x/div))*div;
 }
-double Root(double x, int32 a=2)noexcept
+template<typename Int>
+Int GCD(Int a, Int b)noexcept
 {
-	double y=0;
-	if(x<0&&(a&1)==0)
+	Int rem=a%b;
+	while(rem!=0)
 	{
-		return 0;
+		a=b;
+		b=rem;
+		rem=a%b;
 	}
-	while(Power(y+1e1, a)<=x)
-	{
-		y+=1e1;
-	}
-	while(Power(y+1e0, a)<=x)
-	{
-		y+=1e0;
-	}
-	while(Power(y+1e-1, a)<=x)
-	{
-		y+=1e-1;
-	}
-	while(Power(y+1e-2, a)<=x)
-	{
-		y+=1e-2;
-	}
-	while(Power(y+1e-3, a)<=x)
-	{
-		y+=1e-3;
-	}
-	while(Power(y+1e-4, a)<=x)
-	{
-		y+=1e-4;
-	}
-	while(Power(y+1e-5, a)<=x)
-	{
-		y+=1e-5;
-	}
-	while(Power(y+1e-6, a)<=x)
-	{
-		y+=1e-6;
-	}
-	while(Power(y+1e-7, a)<=x)
-	{
-		y+=1e-7;
-	}
-	while(Power(y+1e-8, a)<=x)
-	{
-		y+=1e-8;
-	}
-	while(Power(y+1e-9, a)<=x)
-	{
-		y+=1e-9;
-	}
-	while(Power(y+1e-10, a)<=x)
-	{
-		y+=1e-10;
-	}
-	while(Power(y+1e-11, a)<=x)
-	{
-		y+=1e-11;
-	}
-	while(Power(y+1e-12, a)<=x)
-	{
-		y+=1e-12;
-	}
-	while(Power(y+1e-13, a)<=x)
-	{
-		y+=1e-13;
-	}
-	while(Power(y+1e-14, a)<=x)
-	{
-		y+=1e-14;
-	}
-	while(Power(y+1e-15, a)<=x)
-	{
-		y+=1e-15;
-	}
-	return y;
-}
-uint64 Fact(uint8 x)noexcept
-{
-	if(x>20)
-	{
-		return 0;
-	}
-	if(x<2)
-	{
-		return 1;
-	}
-	uint64 result=x;
-	for(uint8 i=2; i<=x; ++i)
-	{
-		result*=i;
-	}
-	return result;
-}
-uint32 GCD(uint32 a,uint32 b)noexcept
-{
-	uint32 zbytek=0;
-	for(;;)
-	{
-		zbytek=a%b;
-		if(zbytek==0)
-		{
-			return b;
-		}
-		else
-		{
-			a=b;
-			b=zbytek;
-		}
-	}
+	return b;
 }
 uint32 LCM(uint32 a, uint32 b)noexcept
 {
@@ -167,8 +61,8 @@ uint32 LCM(uint32 a, uint32 b)noexcept
 }
 
 template<typename T>
-T ArithmeticProgression(T first, T lenght, T step=T(1))
+constexpr T ArithmeticProgression(T first, T lenght, T step=T(1))noexcept
 {
-	return lenght*(2*first+step*(lenght-1))/2;
+	return lenght*(first+step*(lenght-1)/2);
 }
 }
