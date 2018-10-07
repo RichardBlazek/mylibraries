@@ -41,7 +41,7 @@ constexpr Int Round(Num x)noexcept
 template<typename Num, typename Int>
 constexpr Num Modulo(Num x, Num div)
 {
-	return (x/div-Int(x/div))*div;
+	return x-Int(x/div)*div;
 }
 template<typename Int>
 Int GCD(Int a, Int b)noexcept
