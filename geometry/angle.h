@@ -30,30 +30,18 @@ namespace geometry
 			return Angle(DegToRad(angle));
 		}
 		//Porovnavani
-		constexpr bool operator==(const Angle& second)const noexcept
-		{
-			return value==second.value;
+		#define CMP_FUNC_DEF(op) \
+		constexpr bool operator op(const Angle& second)const noexcept\
+		{\
+			return value op second.value;\
 		}
-		constexpr bool operator!=(const Angle& second)const noexcept
-		{
-			return value!=second.value;
-		}
-		constexpr bool operator<(const Angle& second)const noexcept
-		{
-			return value<second.value;
-		}
-		constexpr bool operator>(const Angle& second)const noexcept
-		{
-			return value>second.value;
-		}
-		constexpr bool operator<=(const Angle& second)const noexcept
-		{
-			return value<=second.value;
-		}
-		constexpr bool operator>=(const Angle& second)const noexcept
-		{
-			return value>=second.value;
-		}
+		CMP_FUNC_DEF(==)
+		CMP_FUNC_DEF(!=)
+		CMP_FUNC_DEF(<)
+		CMP_FUNC_DEF(>)
+		CMP_FUNC_DEF(<=)
+		CMP_FUNC_DEF(>=)
+		#undef CMP
 		//Scitani
 		constexpr Angle operator-(const Angle& second)const noexcept
 		{
