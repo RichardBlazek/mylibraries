@@ -233,7 +233,6 @@ public:
 		{
 			Swap(alloc[i], alloc[len-i-1]);
 		}
-		return *this;
 	}
 	template<typename Callable>
 	size_t find(const Callable& fun)const noexcept
