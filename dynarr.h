@@ -231,7 +231,7 @@ public:
 	{
 		for(size_t i=0; i<(len>>1); ++i)
 		{
-			Swap(alloc[i], alloc[len-i-1]);
+			func::Swap(alloc[i], alloc[len-i-1]);
 		}
 	}
 	template<typename Callable>

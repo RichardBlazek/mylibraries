@@ -14,14 +14,14 @@ public:
 	};
     Optional()=default;
     Optional(const Optional& opt)
-		:value(opt.HasValue()?new T(*opt.value):nullptr){}
+		:value(bool(opt)?new T(*opt.value):nullptr){}
 	~Optional()
 	{
         delete value;
 	}
     Optional& operator=(const Optional& opt)
     {
-    	value=opt.HasValue()?new T(*opt.value):nullptr;
+    	value=bool(opt)?new T(*opt.value):nullptr;
     	return *this;
     }
     Optional(Optional&& opt):value(opt.value)

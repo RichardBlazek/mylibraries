@@ -1,20 +1,24 @@
 #pragma once
 
 #include <string>
-#include "dynarr.h"
+#include <vector>
 
 namespace strfun
 {
 template<typename Char>
-using String=std::basic_string<Char>;
-
-template<typename Char>
-using StringList=containers::DynArr<String<Char>>;
-
-template<typename Char>
-StringList<Char> Split(const String<Char>& text, Char character)
+bool StartsWith(const std::basic_string<Char>& text, const std::basic_string<Char>& tested)
 {
-    StringList<Char> result(1);
+	return text.substr(0, tested.size())==tested;
+}
+template<typename Char>
+bool EndsWith(const std::basic_string<Char>& text, const std::basic_string<Char>& tested)
+{
+	return text.substr(text.size()-tested.size())==tested;
+}
+template<typename Char>
+std::vector<std::basic_string<Char>> Split(const std::basic_string<Char>& text, Char character)
+{
+    std::vector<Char> result(1);
     for(auto& c:text)
 	{
         if(c==character)
