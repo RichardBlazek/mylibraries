@@ -23,6 +23,10 @@ public:
 		{
 			return pos!=second.pos;
 		}
+		T operator*()const
+		{
+			return pos;
+		}
 		void operator++()
 		{
 			if(step>=0)

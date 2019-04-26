@@ -83,4 +83,19 @@ namespace colors
 			return h!=second.h||s!=second.s||l!=second.l;
 		}
     };
+    struct LYG
+    {
+    	uint8 l=0, y=0, g=0;
+    	constexpr LYG()=default;
+        constexpr LYG(uint8 l, uint8 y, uint8 g):l(l), y(y), g(g) {}
+        constexpr LYG(RGB rgb):l((rgb.r+rgb.g+rgb.b)/3)
+        {
+        	y=(l>0?255*(rgb.r+rgb.g)/l:0);
+        	g=(y>0?255*rgb.g/y:0);
+        }
+        constexpr operator RGB()const
+        {
+        	return RGB(3*l*y*(255-g)/255/255, 3*l*y*g, 3*l*(255-y)/255);
+        }
+    };
 }

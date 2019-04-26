@@ -152,3 +152,16 @@ namespace geometry
 	template<typename T>
 	using Point=coordinates::Cartesian<T>;
 }
+namespace func
+{
+	template<typename T, typename T2>
+	geometry::Point<T> Min(const geometry::Point<T>& p1, const geometry::Point<T2>& p2)
+	{
+		return geometry::Point<T>(Min(p1.x, p2.x), Min(p1.y, p2.y));
+	}
+	template<typename T, typename T2>
+	geometry::Point<T> Max(const geometry::Point<T>& p1, const geometry::Point<T2>& p2)
+	{
+		return geometry::Point<T>(Max(p1.x, p2.x), Max(p1.y, p2.y));
+	}
+}

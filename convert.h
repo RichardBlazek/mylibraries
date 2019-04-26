@@ -8,7 +8,7 @@
 
 namespace convert
 {
-    uint64 Stoui(std::string text)///String TO Unsigned Int-----------------------------------------------------------
+    uint64 Stoui(std::string text)
     {
         uint64 number=0;
         for(auto c:text)
@@ -93,27 +93,24 @@ namespace convert
         }
         return number;
     }
-    std::string Uitos(uint64 number)///Unsigned Int TO String--------------------------------------------------------
+    std::string ToString(uint64 number)
     {
-        if(number==0)
-        {
-            return "0";
-        }
         std::string text;
-        while(number!=0)
+        do
         {
             text=char('0'+number%10)+text;
             number/=10;
-        }
+        }while(number!=0);
         return text;
     }
-    inline std::string Itos(int64 number, std::string plus="", std::string minus="-")///Int TO String------------------------------------------------------------
+    inline std::string ToString(int64 number, std::string plus="", std::string minus="-")
     {
-        return (number<0 ? minus : plus)+Uitos(uint64(number)&0x7fffffffffffffff);
+        return (number<0?minus:plus)+ToString(uint64(std::abs(number)));
     }
-    std::string Ftos(double number, char dec_separ='.', uint8 precision=6)
+    std::string ToString(double number, char dec_separ='.', uint64 precision=1'000'000)
     {
-        std::string str=Itos(int64(number*math::Power(10, precision)));
-        return str.substr(0,str.size()-precision-1)+dec_separ+str.substr(str.size()-precision);
+        std::string integral=ToString(int64(number)), rest=ToString(uint64(std::abs(number-int64(number))*precision));
+        rest.resize(ToString(precision).size()-1, '0');
+        return integral+(rest.empty()?"":dec_separ+rest);
     }
 }

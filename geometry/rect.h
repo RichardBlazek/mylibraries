@@ -6,12 +6,12 @@
 
 namespace geometry
 {
-	template<typename pos_type, typename size_type>
+	template<typename pos_type>
 	struct Rect
 	{
-		static_assert(std::is_arithmetic_v<pos_type>&&std::is_arithmetic_v<size_type>, "Position and size must be arithmetic!");
-		static_assert(std::is_unsigned_v<size_type>, "Size must be unsigned!");
+		static_assert(std::is_arithmetic_v<pos_type>, "Position must have arithmetic type!");
 
+		using size_type=std::make_unsigned_t<pos_type>;
 		using XY=Point<pos_type>;
 		using WH=Point<size_type>;
 
@@ -36,21 +36,18 @@ namespace geometry
 		template<typename size_typ>
 		Rect(Point<size_typ> wh)noexcept :Rect(0, 0, wh){}
 
-		///Functions for easy manipulation with Rectangle
 		template<typename pos_typ>
 		bool Encloses(const Point<pos_typ>& point)const noexcept
 		{
 			return point.x>=x&&point.x<Right()&&point.y>=y&&point.y<Down();
 		}
-		///Returns smallest Rectangle enclosing a set of points['points']
-		template<typename pos_typ>
-		static Rect Enclose(const std::vector<Point<pos_typ>>& points)noexcept
+		static Rect Enclose(const std::vector<Point<pos_type>>& points)noexcept
 		{
 			if(points.empty())
 			{
 				return Rect();
 			}
-			Point<pos_typ> min=points[0], max=points[0];
+			XY min=points[0], max=points[0];
 			for(size_t i=1;i<points.size();++i)
 			{
 				min=XY(func::Min(points[i].x, min.x), func::Min(points[i].y, min.y));
@@ -58,10 +55,17 @@ namespace geometry
 			}
 			return Rect(min, max-min);
 		}
-		///If widht or height is equal to zero, this function returns [true]
+		template<typename... PosTypes>
+		static Rect Enclose(const PosTypes&... points)noexcept
+		{
+			static_assert(sizeof...(PosTypes)>1, "Function requires at least two parameters");
+			XY min=XY(func::Min(points.x...), func::Min(points.y...));
+			XY max=XY(func::Max(points.x...), func::Max(points.y...));
+			return Rect(min, max-min);
+		}
 		bool IsEmpty()const noexcept
 		{
-			return w*h==0;
+			return Content()==0;
 		}
 		XY Center()const noexcept
 		{
@@ -107,11 +111,11 @@ namespace geometry
 		{
 			return y+h;
 		}
-		uint32 Content()const noexcept
+		size_type Content()const noexcept
 		{
-			return std::abs(w)*std::abs(h);
+			return w*h;
 		}
-		///Compare two Rectangles
+
 		bool operator==(const Rect& second)const noexcept
 		{
 			return x==second.x&&y==second.y&&w==second.w&&h==second.h;
@@ -140,22 +144,50 @@ namespace geometry
 		{
 			return bool((*this)*second);
 		}
+		Rect WithSize(WH size)const noexcept
+		{
+			return Rect(Position(), size);
+		}
+		Rect WithPosition(XY pos)const noexcept
+		{
+			return Rect(pos, Size());
+		}
+		Rect WithWidth(size_type width)const noexcept
+		{
+			return WithSize(WH(width, h));
+		}
+		Rect WithHeight(size_type height)const noexcept
+		{
+			return WithSize(WH(w, height));
+		}
+		Rect WithCenter(XY center)const noexcept
+		{
+			return WithPosition(center-Size()/2);
+		}
+		template<typename size_typ>Rect Extended(Point<size_typ> size_difference)const noexcept
+		{
+			return Rect(Size()+size_difference).WithCenter(Center());
+		}
+		template<typename size_typ>Rect Narrowed(Point<size_typ> size_difference)const noexcept
+		{
+			return Rect(Size()-size_difference).WithCenter(Center());
+		}
 		bool Near(const Rect& second)const noexcept
 		{
-			return Rect(x-1, y-1, w+2, h+2).Intersects(second);
+			return Extended(XY(2,2)).Intersects(second);
 		}
-		///This function returns intersection of [this] and ['second']
+		//Intersection
 		Optional<Rect> operator*(const Rect& second)const noexcept
 		{
 			if(IsEmpty())
 			{
-				return Rect();
+				return Optional<Rect>();
 			}
 			pos_type left=func::Max(x, second.x), right=func::Min(Right(), second.Right());
 			pos_type up=func::Max(y, second.y), down=func::Min(Down(), second.Down());
 			return (right<left||down<up)?Optional<Rect>():Optional<Rect>(Rect(left, up, right-left, down-up));
 		}
-		///This function returns union of [this] and ['second']
+		//Union
 		Rect operator+(const Rect& second)const noexcept
 		{
 			if(IsEmpty())
@@ -166,19 +198,19 @@ namespace geometry
 			pos_type up=func::Min(y, second.y), down=func::Max(Down(), second.Down());
 			return Rect(left, up, right-up, down-up);
 		}
-		Rect operator+(XY shift)const
+		Rect operator+(XY shift)const noexcept
 		{
 			return Rect(Position()+shift, Size());
 		}
-		Rect operator-(XY shift)const
+		Rect operator-(XY shift)const noexcept
 		{
 			return Rect(Position()-shift, Size());
 		}
-		Rect& operator+=(XY shift)
+		Rect& operator+=(XY shift)noexcept
 		{
 			return *this=*this+shift;
 		}
-		Rect& operator-=(XY shift)
+		Rect& operator-=(XY shift)noexcept
 		{
 			return *this=*this-shift;
 		}
