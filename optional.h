@@ -12,7 +12,7 @@ public:
 	{
 		using std::logic_error::logic_error;
 	};
-    Optional()=default;
+    constexpr Optional():value(nullptr){}
     Optional(const Optional& opt)
 		:value(bool(opt)?new T(*opt.value):nullptr){}
 	~Optional()

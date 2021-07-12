@@ -29,7 +29,7 @@ class LoopTime
 private:
 	StopWatch time;
 public:
-	LoopTime()=default;
+	LoopTime():time(){}
 	template<typename Rep, typename Period>
 	void NextLoop(std::chrono::duration<Rep, Period> loop_time)
 	{

@@ -1,17 +1,15 @@
 #pragma once
 
-#include "types.h"
+#include <stddef.h>
 
 namespace func
 {
-///Pretypovani na r-hodnotu
 template<typename T>inline constexpr
 T&& Move(const T& obj)
 {
     return (T&&)obj;
 }
 
-///Prohozeni 2 hodnot
 template<typename T>
 void Swap(T& a, T& b)
 {
@@ -20,12 +18,12 @@ void Swap(T& a, T& b)
     b=Move(tmp);
 }
 
-template<typename T, size_t S>constexpr
+template<typename T, size_t S>inline constexpr
 size_t Size(T(&)[S])
 {
 	return S;
 }
-template<typename T>constexpr
+template<typename T>inline constexpr
 size_t Size(T& x)
 {
 	return x.size();
@@ -89,6 +87,11 @@ auto Avg(const T&... arg)
     return Sum<T...>(arg...)/sizeof...(arg);
 }
 
+template<typename ValueT, typename CountT>inline constexpr
+auto ArithmeticProgression(ValueT start, CountT count, ValueT step)
+{
+    return start*count+count*(count-1)/2*step;
+}
 
 template<typename Pair, typename ContA, typename ContB, typename Func>constexpr
 Pair BestPair(const ContA& list_a, const ContB& list_b, Func better)
@@ -102,5 +105,16 @@ Pair BestPair(const ContA& list_a, const ContB& list_b, Func better)
         }
     }
     return best;
+}
+template<typename T>
+T* Reallocate(T* array, size_t old_len, size_t new_len)
+{
+	T* result=new T[new_len];
+	for(size_t i=0, len=func::Min(old_len, new_len); i<len; ++i)
+	{
+		result[i]=Move(array[i]);
+	}
+	delete[] array;
+	return result;
 }
 }

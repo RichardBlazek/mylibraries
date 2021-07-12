@@ -1,35 +1,35 @@
 #pragma once
 
 #include <vector>
-#include "func.h"
+#include <string>
+#include <utility>
 
-namespace strfun
-{
-template<typename String>
-bool StartsWith(const String& text, const String& tested)
+template<typename CharT>
+bool StartsWith(const std::basic_string<CharT>& text, const String& tested)
 {
 	return text.substr(0, tested.size())==tested;
 }
-template<typename String>
-bool EndsWith(const String& text, const String& tested)
+template<typename CharT>
+bool EndsWith(const std::basic_string<CharT>& text, const String& tested)
 {
 	return text.substr(text.size()-tested.size())==tested;
 }
-template<typename String, typename Char>
-std::vector<String> Split(const String& text, Char character)
+template<typename CharT>
+void Split(const std::basic_string<CharT>& str, char sep, bool trim_empty=false)
 {
-    std::vector<String> result(1);
-    for(auto& c:text)
+	vector<std::basic_string<CharT>> tokens;
+	size_t pos=0, last_pos=0, length=str.size();
+	while(last_pos<length+1)
 	{
-        if(c==character)
+		pos=str.find(sep, last_pos);
+		if(pos==std::string::npos)
 		{
-			result.push_back("");
+			pos=length;
 		}
-		else
+		if(pos!=last_pos||!trim_empty)
 		{
-			result.back()+=c;
+			tokens.push_back(basic_string<CharT>(str.data()+last_pos, pos-last_pos));
 		}
+		last_pos=pos+1;
 	}
-	return func::Move(result);
-}
 }

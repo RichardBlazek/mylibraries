@@ -19,6 +19,10 @@ namespace geometry
 			template<typename T>
 			constexpr Cartesian(const Cartesian<T>& second)
 				:Cartesian(T(second.x), T(second.y)) {}
+			constexpr double Distance()const noexcept
+			{
+				return std::sqrt(x*x+y*y);
+			}
 			constexpr bool operator==(const Cartesian& second)const noexcept
 			{
 				return x==second.x&&y==second.y;

@@ -20,7 +20,7 @@ namespace geometry
 		Real value=0;
 	public:
 		constexpr Angle()=default;
-		constexpr Angle(Real angle)noexcept:value(angle-max*int32(angle/max)) {}
+		constexpr Angle(Real angle):value(angle-max*int32(angle/max)) {}
 		constexpr Angle& operator=(Real angle)noexcept
 		{
 			return *this=Angle(angle);
