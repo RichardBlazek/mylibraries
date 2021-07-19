@@ -8,17 +8,14 @@ private:
 	constexpr static uint32 c=1, a=1025;
 	uint32 seed;
 public:
-	Random(uint32 seed)
+	Random(uint32 seed) : seed(seed) {}
+	void Reset(uint32 newSeed)
 	{
-		this->seed=seed;
-	}
-	void Reset(uint32 seed)
-	{
-		this->seed=seed;
+		seed=newSeed;
 	}
 	uint32 Next()
 	{
-		seed=(seed*a+c);
+		seed=seed*a+c;
 		return seed;
 	}
 	uint32 Next(uint32 range)

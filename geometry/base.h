@@ -2,6 +2,8 @@
 
 #include <cmath>
 #include <type_traits>
+#include <vector>
+#include "mylibraries/types.h"
 #include "mylibraries/optional.h"
 #include "mylibraries/func.h"
 

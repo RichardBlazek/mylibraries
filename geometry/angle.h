@@ -23,7 +23,8 @@ namespace geometry
 		constexpr Angle(Real angle):value(angle-max*int32(angle/max)) {}
 		constexpr Angle& operator=(Real angle)noexcept
 		{
-			return *this=Angle(angle);
+			value=Angle(angle).value;
+			return *this;
 		}
 		constexpr static Angle FromDeg(Real angle)noexcept
 		{

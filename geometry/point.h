@@ -104,10 +104,8 @@ namespace geometry
 				:lenght(lenght), angle(angle) {}
 			template<typename point_typ>
 			constexpr Polar(const Cartesian<point_typ>& cart)
-			{
-				lenght=std::sqrt(std::abs(cart.x*cart.x+cart.y*cart.y));
-				angle=std::atan2(cart.y, cart.x);
-			}
+				: lenght(std::sqrt(std::abs(cart.x*cart.x+cart.y*cart.y))),
+					angle(std::atan2(cart.y, cart.x)) {}
 			template<typename point_typ>
 			constexpr operator Cartesian<point_typ>()const
 			{
